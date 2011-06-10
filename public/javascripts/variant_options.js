@@ -24,18 +24,39 @@ if (!Array.find_matches) Array.find_matches = function(a) {
 function VariantOptions(options) {
   
   var options = options;
-  var variant, inventory, div, types, values, buttons, index = -1, selected = [];
+  var variant, inventory, div, values, parent, buttons, index = -1, selected = [];
   
   function init() {
     div = $('#product-variants');
-    types = div.find('.variant-option-type');
     values = div.find('.variant-option-values');
     disable(values.find('a.option-value'));
     advance();
+    
+    /*
+$('.clear-option a.clear-button').hide().click(function(evt) {
+      evt.preventDefault();
+      var a = $(this).hide();
+      var p = get_index(a);
+      
+      
+      
+      index = selected.length;
+      set_buttons();
+      //buttons.removeClass('selected');
+      disable(div.find('a.option-value').not('.selected'));
+      enable(set_buttons().removeClass('selected'));
+      
+    }); 
+*/   
   }
   
+  function get_index(button) {
+    parent = $(button).parents('div');
+    return parseInt(parent.attr('class').replace('index-', ''));
+  }
+    
   function disable(btns) {
-    return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5); //.unbind('click').click(cancel_click);
+    return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5);
   }
   
   function enable(btns) {
@@ -94,13 +115,21 @@ function VariantOptions(options) {
     var a = enable($(this).addClass('selected'));
     
     // backtrack
-    var parent_index = parseInt($("#option_type_" + ids[0]).attr('class').replace('index-', ''));    
+    var parent_index = get_index(this);
+    
+    console.log(parent, parent_index, index);
+    
     if (parent_index < index) {
+      //parent.find('.clear-button').hide();
       index = parent_index;      
       selected = selected.slice(0, index);
       set_buttons();
       disable(buttons.not(this));
+    } else {
+      //parent.find('.clear-button').show();
     }
+    //parent.find('.clear-button').show();
+
     
     try {
       var _ids, _vids, vids = options[ids[0]][ids[1]];   

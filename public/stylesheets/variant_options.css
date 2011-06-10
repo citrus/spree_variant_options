@@ -26,6 +26,12 @@
   float: none;
   clear: both;
 }
+.variant-option-values li.clear-option a.clear-button {
+  display: none;
+  font-weight: bold;
+  background-color: #eee;
+  color: #c00e0e;
+}
 
 .option-value.selected,
 .option-value.enabled:hover {
