@@ -8,7 +8,7 @@ Spree Variant Options
 Installation
 ------------
 
-Dont do this yet...
+Don't do this quite yet...
 
 
 Testing
