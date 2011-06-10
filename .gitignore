@@ -1,0 +1,7 @@
+*.gem
+.bundle
+.DS_Store
+Gemfile.lock
+pkg/*
+lib/dummy_hooks/after_migrate.rb
+test/dummy
