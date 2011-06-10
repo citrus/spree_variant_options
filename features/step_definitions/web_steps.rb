@@ -23,9 +23,13 @@ Given /^I'm on the ((?!page).*) page$/ do |path|
 end
 
 Given /^I'm on the ((?!page).*) page for (.*)$/ do |path, id|
+
+  puts "PROD: #{@product.inspect}"
+  puts @product.variants.count rescue 0
+
   case id
     when "the first product"
-      id = Product.first
+      id = @product ||= Product.last
   end
   path = "#{path.downcase.gsub(/\s/, '_')}_path".to_sym
   
