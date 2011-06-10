@@ -34,16 +34,18 @@ function VariantOptions(options) {
     advance();
   }
   
-  
   function disable(btns) {
     return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5); //.unbind('click').click(cancel_click);
   }
+  
   function enable(btns) {
     return btns.fadeTo(0, 1).addClass('enabled').unbind('click').click(handle_click);
   }
+  
   function out_of_stock(element) {
     return $(element).removeClass('in-stock').addClass('out-of-stock').unbind('click').click(cancel_click) 
   }  
+  
   function toggle() {
     if (variant) {
       $('#variant_id').val(variant);
@@ -52,8 +54,7 @@ function VariantOptions(options) {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
     }    
-  }  
-  
+  }
   
   function advance() {
     index++;
@@ -62,13 +63,9 @@ function VariantOptions(options) {
     toggle();
   }
   
-  
   function set_buttons() {
     return buttons = $(values[index]).find('a.option-value');
   }
-  
-  
-  
   
   function find_variant() {
     var ids = [], i = selected.length
@@ -109,7 +106,7 @@ function VariantOptions(options) {
       var _ids, _vids, vids = options[ids[0]][ids[1]];   
       selected[index] = vids;
       find_variant();
-      console.log('found?', variant, inventory);
+      //console.log('found?', variant, inventory);
       if (variant === false) {
         advance();
         var keys = Object.keys(vids);
@@ -134,6 +131,7 @@ function VariantOptions(options) {
         toggle();
       }
     } catch(error) {
+      if (!(window.console && window.console.log)) { return }
       console.log("Type / Value " + this.rel + " combination could not be found");
       console.log(error);
     }
