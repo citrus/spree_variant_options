@@ -3,15 +3,18 @@
     <h2><%= t('variants') %></h2>
     
     
-    
+    <% index = 0 %>
     <% @product.grouped_option_values.each do |type, values| %>
-      <h3 class="variant-option-type"><%= type.presentation %></h3>
-      <ul class="variant-option-values">
-      <% values.each do |value| %>
-        <li><%= link_to value.presentation, "#", :class => "option-value", :rel => "#{type.id}-#{value.id}" %></li>
-      <% end %>
-        <li class="clear"></li>
-      </ul>
+      <div id="<%= dom_id(type) %>" class="index-<%= index %>">
+        <h3 class="variant-option-type"><%= type.presentation %></h3>
+        <ul class="variant-option-values">
+        <% values.each do |value| %>
+          <li><%= link_to value.presentation, "#", :title => value.presentation, :class => "option-value", :rel => "#{type.id}-#{value.id}" %></li>
+        <% end %>
+          <li class="clear"></li>
+        </ul>
+      </div>
+      <% index += 1 %>
     <% end %>
         
     <%= variant_options_hash %>
