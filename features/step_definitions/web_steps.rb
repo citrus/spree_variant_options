@@ -6,6 +6,8 @@ require File.expand_path("../../support/selectors.rb", __FILE__)
 def get_parent(parent)
   case parent.sub(/^the\s/, '')
     when "flash notice";  ".flash"
+    when "first set of options"; "#option_type_#{@product.option_types.first.id}"
+    when "second set of options"; "#option_type_#{@product.option_types[1].id}"
   end
 end
 
@@ -23,22 +25,11 @@ Given /^I'm on the ((?!page).*) page$/ do |path|
 end
 
 Given /^I'm on the ((?!page).*) page for (.*)$/ do |path, id|
-
-  puts "PROD: #{@product.inspect}"
-  puts @product.variants.count rescue 0
-
   case id
     when "the first product"
       id = @product ||= Product.last
   end
   path = "#{path.downcase.gsub(/\s/, '_')}_path".to_sym
-  
-  
-  puts path.inspect
-  puts id.to_param
-  
-  
-  
   begin 
     visit send(path, id)
   rescue 
@@ -67,6 +58,13 @@ end
 When /^(?:|I )follow "([^"]*)"$/ do |link|
   click_link(link)
 end
+
+When /^(?:|I )follow "([^"]*)" within (.*)$/ do |link, parent|
+  within get_parent(parent) do
+    click_link(link)
+  end
+end
+
 
 When /^I wait for (\d+) seconds?$/ do |seconds|
   sleep seconds.to_f
