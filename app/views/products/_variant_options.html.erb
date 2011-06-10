@@ -1,0 +1,31 @@
+<% if @product.has_variants? %>
+  <div id="product-variants">
+    <h2><%= t('variants') %></h2>
+    
+    
+    
+    <% @product.grouped_option_values.each do |type, values| %>
+      <h3 class="variant-option-type"><%= type.presentation %></h3>
+      <ul class="variant-option-values">
+      <% values.each do |value| %>
+        <li><%= link_to value.presentation, "#", :class => "option-value", :rel => "#{type.id}-#{value.id}" %></li>
+      <% end %>
+        <li class="clear"></li>
+      </ul>
+    <% end %>
+        
+    <%= variant_options_hash %>
+        
+    <script type="text/javascript">
+    //<![CDATA[
+    	var variant_options = new VariantOptions(<%= variant_options_hash %>);
+    //]]>
+    </script>
+    
+  </div>
+<% end%>
+
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'variant_options' %>
+  <%= javascript_include_tag 'variant_options' %>
+<% end %>

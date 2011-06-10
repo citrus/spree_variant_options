@@ -1,0 +1,31 @@
+#product-variants {
+  
+}
+.variant-option-type {
+  margin-bottom: 0;
+}
+#product-variants ul.variant-option-values {
+  list-style-type: none;  
+  margin-bottom: 0.5em;
+}
+.variant-option-values li {
+  display: block;
+  position: relative;
+  float: left;
+}
+.variant-option-values li a {
+  display: block;
+  border: 1px solid #ddd;  
+  padding: 1px 5px;
+  margin: 3px 3px 0 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.variant-option-values li a:hover {
+  background-color: #eee;
+}
+.variant-option-values li.clear {
+  border: 0;
+  float: none;
+  clear: both;
+}
