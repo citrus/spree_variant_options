@@ -9,19 +9,27 @@
         <h3 class="variant-option-type"><%= type.presentation %></h3>
         <ul class="variant-option-values">
         <% values.each do |value| %>
-          <li><%= link_to value.presentation, "#", :title => value.presentation, :class => "option-value", :rel => "#{type.id}-#{value.id}" %></li>
+          <% variants = @variants.select{|i| i.option_values.select{|j| j.option_type_id == type.id && j == value }.length == 1 } %>
+          <% out_of_stock = variants.sum(&:count_on_hand) == 0 %>
+          
+          <%# inventories = @product.variant_options_hash[type.id.to_s][value.id.to_s] rescue 'oops!' %>
+          
+          <%#= variants.sum(&:count_on_hand) %>
+          <%#= variants.count %>
+          
+          <li>       
+            <%= link_to content_tag(:span, value.presentation), "#", :title => value.presentation, :class => "option-value #{out_of_stock ? 'out-of-stock' : 'in-stock'}", :rel => "#{type.id}-#{value.id}" %>
+          </li>
         <% end %>
           <li class="clear"></li>
         </ul>
       </div>
       <% index += 1 %>
     <% end %>
-        
-    <%= variant_options_hash %>
-        
+    <%= hidden_field_tag "products[#{@product.id}]", "", :id => "variant_id", :class => "hidden" %>
     <script type="text/javascript">
     //<![CDATA[
-    	var variant_options = new VariantOptions(<%= variant_options_hash %>);
+    	var variant_options = new VariantOptions(<%== @product.variant_options_hash.to_json %>);
     //]]>
     </script>
     

@@ -4,11 +4,27 @@ if (!Object.keys) Object.keys = function(o) {
   for(p in o) if(Object.prototype.hasOwnProperty.call(o,p)) ret.push(p);
   return ret;
 }
+if (!Array.find_matches) Array.find_matches = function(a) {
+  var i, m = [];
+  a = a.sort();
+  i = a.length
+  while(i--) {
+    if (a[i - 1] == a[i]) {
+      m.push(a[i]);
+    }
+  }
+  if (m.length == 0) {
+    return false;
+  }
+  return m;
+}
+
+
 
 function VariantOptions(options) {
   
   var options = options;
-  var variant, div, types, values, buttons, index = -1, selected = [];
+  var variant, inventory, div, types, values, buttons, index = -1, selected = [];
   
   function init() {
     div = $('#product-variants');
@@ -18,53 +34,55 @@ function VariantOptions(options) {
     advance();
   }
   
-  function disable(btns) {
-    return btns.removeClass('selected').fadeTo(0, 0.3).click(cancel_click);
-  }
   
-  function enable(btns) {
-    return btns.fadeTo(0, 1).unbind('click').click(handle_click);
+  function disable(btns) {
+    return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5); //.unbind('click').click(cancel_click);
   }
+  function enable(btns) {
+    return btns.fadeTo(0, 1).addClass('enabled').unbind('click').click(handle_click);
+  }
+  function out_of_stock(element) {
+    return $(element).removeClass('in-stock').addClass('out-of-stock').unbind('click').click(cancel_click) 
+  }  
+  function toggle() {
+    if (variant) {
+      $('#variant_id').val(variant);
+      $('button[type=submit]').attr('disabled', false).fadeTo(0, 1);
+    } else {
+      $('#variant_id').val('');
+      $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
+    }    
+  }  
+  
   
   function advance() {
     index++;
     enable(set_buttons());
+    enable($('a.option-value.out-of-stock').removeClass('out-of-stock'));
+    toggle();
   }
-  
-  function out_of_stock() {
-    alert('out of stock!');
-  }  
-  
-  function select() {
-    console.log('choose variant');
-  }
-  
   
   
   function set_buttons() {
     return buttons = $(values[index]).find('a.option-value');
   }
   
+  
+  
+  
   function find_variant() {
-    console.log('find_variant');
-    console.log(options);
-    
-    var res = [], ids = [], i = selected.length
+    var ids = [], i = selected.length
     while(i--) {
       ids = ids.concat(Object.keys(selected[i]));
     }
-    ids = ids.sort();
-    i = ids.length
-    while(i--) {
-      if (ids[i - 1] == ids[i]) {
-        res.push(ids[i]);
-      }
+    matches = Array.find_matches(ids);
+    if (matches) {
+      variant = matches[0];
+      inventory = selected[selected.length - 1][variant];
+    } else {
+      variant = false;
+      inventory = 0;
     }
-    if (res.length != 1) {
-      return false;
-    }
-    variant = res[0];
-    return selected[0][variant];
   }
   
   function cancel_click(evt) {
@@ -74,10 +92,11 @@ function VariantOptions(options) {
   function handle_click(evt) {
     evt.preventDefault();
     var ids = this.rel.split("-");
-    
+        
     disable(buttons.not(this).removeClass('selected'));
     var a = enable($(this).addClass('selected'));
     
+    // backtrack
     var parent_index = parseInt($("#option_type_" + ids[0]).attr('class').replace('index-', ''));    
     if (parent_index < index) {
       index = parent_index;      
@@ -87,19 +106,36 @@ function VariantOptions(options) {
     }
     
     try {
-      var inv, vids = options[ids[0]][ids[1]];   
+      var _ids, _vids, vids = options[ids[0]][ids[1]];   
       selected[index] = vids;
-      inv = find_variant();
-      console.log(variant, inv);
-      if (inv === false) {
-        advance();      
-      } else if (inv == 0) {
-        out_of_stock();
+      find_variant();
+      console.log('found?', variant, inventory);
+      if (variant === false) {
+        advance();
+        var keys = Object.keys(vids);
+        buttons.each(function(i, element) {
+          _ids = element.rel.split("-");
+          _vids = options[_ids[0]][_ids[1]]
+          keys = keys.concat(Object.keys(_vids));
+          matches = Array.find_matches(keys);
+          if (matches) {
+            var i = matches.length;
+            while (i--) {
+              if (_vids[matches[i]] <= 0) {
+                out_of_stock(element);
+              }
+            };
+          }
+        });
+      } else if (inventory == 0) {
+        // shouldn't really ever get here...
+        alert('out of stock!');
       } else {
-        select();
+        toggle();
       }
     } catch(error) {
       console.log("Type / Value " + this.rel + " combination could not be found");
+      console.log(error);
     }
   }
   

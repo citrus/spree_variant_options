@@ -6,7 +6,7 @@
 }
 #product-variants ul.variant-option-values {
   list-style-type: none;  
-  margin-bottom: 0.5em;
+  margin-bottom: 1em;
 }
 .variant-option-values li {
   display: block;
@@ -21,11 +21,21 @@
   text-decoration: none;
   cursor: pointer;
 }
-.variant-option-values li a:hover {
-  background-color: #eee;
-}
 .variant-option-values li.clear {
   border: 0;
   float: none;
   clear: both;
+}
+
+.option-value.selected,
+.option-value.enabled:hover {
+  background-color: #1072B9;
+  color: #fff;
+}
+.option-value.out-of-stock,
+.option-value.out-of-stock:hover {
+  display: block;  
+  background-color: #eee;
+  color: #aaa;
+  cursor: default;
 }
