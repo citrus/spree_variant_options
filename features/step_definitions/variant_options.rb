@@ -17,15 +17,11 @@ end
 # Whens
 
 When /^I click the (current|first|last) clear button$/ do |parent|
-  puts parent
-  
   link = case parent
     when 'first'; find(".clear-index-0")
     when 'last'; find(".clear-index-#{@product.option_types.length - 1}")
     else find(".clear-button:last")
-    #else find(:xpath, '//a[@style="display: block;"]')
   end
-  #link = find(".clear-index-0")
   assert_not_nil link
   link.click
 end
@@ -74,10 +70,9 @@ Then /^I should see an (out-of|in)-stock link for "([^"]*)"$/ do |state, button|
   in_stock = state == "in"
   buttons = button.split(", ")
   buttons.each do |button|
-    link = find_link(button) #find("a.option-value.#{in_stock ? 'in' : 'out-of'}-stock")
+    link = find_link(button)
     assert_equal "option-value #{in_stock ? 'in' : 'out-of'}-stock", link.native.attribute("class")
     assert_not_nil link
-    #assert link.native.attribute("class").include?("enabled")
   end
 end
 
