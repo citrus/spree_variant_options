@@ -88,7 +88,9 @@ function VariantOptions(options) {
     }
     try {
       ids = $.map(objects, function(i) { return Object.keys(i); });
-      obj = objects[0][(Array.find_matches(ids) || [])[0]];
+      i = (Array.find_matches(ids) || [])[0];
+      obj = objects[0][i];
+      obj.id = i;
     } catch(error) {
       obj = null;
       console.log(error);
@@ -105,11 +107,9 @@ function VariantOptions(options) {
     
   function toggle() {
     if (variant) {
-    
-      console.log(variant);
-    
+      console.log("VARIANT:", variant);
       $('#variant_id').val(variant.id);
-      $('button[type=submit]').attr('disabled', false).fadeTo(0, 1);
+      $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
     } else {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
@@ -126,7 +126,7 @@ function VariantOptions(options) {
     enable(buttons.removeClass('selected'));
     toggle();
     parent.nextAll().each(function(index, element) {
-      disable($(element).find('a.option-value').addClass('locked').unbind('click'));
+      disable($(element).find('a.option-value').removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
       $(element).find('a.clear-button').hide();
     });
   }

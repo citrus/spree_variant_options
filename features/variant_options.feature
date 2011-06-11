@@ -11,7 +11,6 @@ Feature: Products should have variant options
     And I should have a hidden input for the selected variant
     And the add to cart button should be disabled
   
-  
   Scenario: Interact with options for a product
     Given I have a product with variants
     And I'm on the product page for the first product
@@ -33,4 +32,45 @@ Feature: Products should have variant options
     When I follow "Small" within the first set of options
     Then I should see an out-of-stock link for "Green"
     And I should see an in-stock link for "Red, Blue, Black, White, Gray"
-    
+  
+  Scenario: Should clear current selection
+    Given I have a product with variants
+    And I'm on the product page for the first product
+    When I follow "Small" within the first set of options
+    And I click the current clear button
+    Then I should see disabled links for the second option type
+    And I should see enabled links for the first option type
+          
+  Scenario: Should clear current selection and maintain parent selection 
+    Given I have a product with variants
+    And I'm on the product page for the first product
+    When I follow "Small" within the first set of options
+    And I follow "Green" within the second set of options
+    Then the add to cart button should be enabled
+    And I click the last clear button
+    Then I should see "Small" selected in the first set of options
+    And I should see enabled links for the second option type
+    And the add to cart button should be disabled
+          
+  Scenario: Should clear current selection and parent selection 
+    Given I have a product with variants
+    And I'm on the product page for the first product
+    When I follow "Small" within the first set of options
+    And I follow "Green" within the second set of options
+    Then the add to cart button should be enabled
+    And I click the first clear button
+    Then I should not see a selected option
+    And I should see disabled links for the second option type
+    And I should see enabled links for the first option type
+    And the add to cart button should be disabled
+            
+  Scenario: Should add proper variant to cart
+    Given I have a product with variants
+    And I'm on the product page for the first product
+    When I follow "Small" within the first set of options
+    And I follow "Green" within the second set of options
+    Then the add to cart button should be enabled
+    And I press "Add To Cart"
+    Then I should be on the cart page
+    And I should see "Size: Small, Color: Green"
+        

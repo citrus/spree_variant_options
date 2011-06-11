@@ -1,3 +1,6 @@
+#===============================
+# Givens
+
 Given /^I have a product( with variants)?$/ do |has_variants|
   @product = Factory.create(has_variants ? :product_with_variants : :product)
 end
@@ -9,6 +12,26 @@ Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   variant = @product.variants.includes(:option_values).select{|i| i.option_value_ids.sort == values.map(&:id) }.first
   @variant = variant if variant.update_attributes(:count_on_hand => 0)
 end
+
+#===============================
+# Whens
+
+When /^I click the (current|first|last) clear button$/ do |parent|
+  puts parent
+  
+  link = case parent
+    when 'first'; find(".clear-index-0")
+    when 'last'; find(".clear-index-#{@product.option_types.length - 1}")
+    else find(".clear-button:last")
+    #else find(:xpath, '//a[@style="display: block;"]')
+  end
+  #link = find(".clear-index-0")
+  assert_not_nil link
+  link.click
+end
+
+#===============================
+# Thens
 
 Then /^the source should contain the options hash$/ do
   assert source.include?("VariantOptions(#{@product.variant_options_hash.to_json})")
@@ -56,4 +79,20 @@ Then /^I should see an (out-of|in)-stock link for "([^"]*)"$/ do |state, button|
     assert_not_nil link
     #assert link.native.attribute("class").include?("enabled")
   end
+end
+
+Then /^I should see "([^"]*)" selected in the first set of options$/ do |button|
+  link = find_link(button)
+  assert_not_nil link
+  assert link.native.attribute("class").include?("selected")
+end
+
+Then /^I should not see a selected option$/ do
+  assert_raises Capybara::ElementNotFound do
+    find(".option-value.selected")
+  end
+end
+
+Then /^I should be on the cart page$/ do
+  assert_equal cart_path, current_path
 end
