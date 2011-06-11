@@ -30,6 +30,7 @@ function VariantOptions(options) {
     disable(divs.find('a.option-value').addClass('locked'));
     update();
     enable(parent.find('a.option-value').removeClass('selected'));
+    toggle();
     $('.clear-option a.clear-button').hide().click(handle_clear);
   }
   
@@ -71,14 +72,23 @@ function VariantOptions(options) {
     matches = Array.find_matches(variant_ids);
     if (matches.length == 1) { 
       variant = variants[matches[0]];
+      variant.id = matches[0];
       console.log(variant);
-      if (variant.count == 0) alert('out of stock');
+      if (variant.count == 0) {
+        alert('out of stock');
+      } else {
+        return variant;
+      }
     }
+    return false;
   }
   
   function toggle() {
     if (variant) {
-      $('#variant_id').val(variant);
+    
+      console.log(variant);
+    
+      $('#variant_id').val(variant.id);
       $('button[type=submit]').attr('disabled', false).fadeTo(0, 1);
     } else {
       $('#variant_id').val('');
@@ -93,6 +103,7 @@ function VariantOptions(options) {
   function clear(i) {
     update(i);
     enable(buttons.removeClass('selected'));
+    toggle();
     parent.nextAll().each(function(index, element) {
       disable($(element).find('a.option-value').addClass('locked').unbind('click'));
       $(element).find('a.clear-button').hide();
@@ -106,6 +117,7 @@ function VariantOptions(options) {
   
   function handle_click(evt) {
     evt.preventDefault();
+    variant = null;
     var a = $(this);
     if (!parent.has(a).length) {
       clear( divs.index(a.parents('.variant-options:first')) ); 
@@ -115,9 +127,8 @@ function VariantOptions(options) {
     parent.find('a.clear-button').css('display', 'block');
     advance();
     if (find_variant()) {
-      console.log('VARIANT!');
-      
-    };
+      toggle();
+    }
   }
   
   $(document).ready(init);

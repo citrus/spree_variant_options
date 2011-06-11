@@ -28,7 +28,7 @@ Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type
     assert_not_nil link
     assert_equal value.presentation, link.text
     assert_equal "#", link.native.attribute('href').last
-    assert_equal "option-value in-stock#{' enabled' if enabled}", link.native.attribute('class')
+    assert_equal "option-value #{enabled ? 'enabled' : 'locked'}", link.native.attribute('class')
     assert_equal rel, link.native.attribute('rel') # obviously!
   end  
 end
@@ -51,7 +51,7 @@ Then /^I should see an (out-of|in)-stock link for "([^"]*)"$/ do |state, button|
   in_stock = state == "in"
   buttons = button.split(", ")
   buttons.each do |button|
-    link = find("a.option-value.#{in_stock ? 'in-stock' : 'out-of-stock'}")
+    link = find("a.option-value") ##{in_stock ? 'in-stock' : 'out-of-stock'}")
     assert_not_nil link
     assert link.native.attribute("class").include?("enabled")
   end
