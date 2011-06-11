@@ -1,169 +1,61 @@
-if (!Object.keys) Object.keys = function(o) {
-  if (o !== Object(o)) throw new TypeError('Object.keys called on non-object');
-  var ret=[],p;
-  for(p in o) if(Object.prototype.hasOwnProperty.call(o,p)) ret.push(p);
-  return ret;
-}
-if (!Array.find_matches) Array.find_matches = function(a) {
-  var i, m = [];
-  a = a.sort();
-  i = a.length
-  while(i--) {
-    if (a[i - 1] == a[i]) {
-      m.push(a[i]);
-    }
-  }
-  if (m.length == 0) {
-    return false;
-  }
-  return m;
-}
-
-
-
 function VariantOptions(options) {
   
   var options = options;
-  var variant, inventory, div, values, parent, buttons, index = -1, selected = [];
+  var divs, parent, index = 0;
   
   function init() {
-    div = $('#product-variants');
-    values = div.find('.variant-option-values');
-    disable(values.find('a.option-value'));
-    advance();
-    
-    /*
-$('.clear-option a.clear-button').hide().click(function(evt) {
-      evt.preventDefault();
-      var a = $(this).hide();
-      var p = get_index(a);
-      
-      
-      
-      index = selected.length;
-      set_buttons();
-      //buttons.removeClass('selected');
-      disable(div.find('a.option-value').not('.selected'));
-      enable(set_buttons().removeClass('selected'));
-      
-    }); 
-*/   
+    divs = $('#product-variants .variant-options'); 
+    disable(divs.find('a.option-value').addClass('locked'));
+    update();
+    enable(parent.find('a.option-value').removeClass('selected'));
+    $('.clear-option a.clear-button').hide().click(handle_clear);
   }
   
-  function get_index(button) {
-    parent = $(button).parents('div');
-    return parseInt(parent.attr('class').replace('index-', ''));
+  function update(i) {
+    index = isNaN(i) ? index : i;
+    parent = $(divs.get(index));
+    buttons = parent.find('a.option-value');
+    parent.find('a.clear-button').hide();
   }
-    
+  
   function disable(btns) {
     return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5);
   }
   
   function enable(btns) {
-    return btns.fadeTo(0, 1).addClass('enabled').unbind('click').click(handle_click);
-  }
-  
-  function out_of_stock(element) {
-    return $(element).removeClass('in-stock').addClass('out-of-stock').unbind('click').click(cancel_click) 
-  }  
-  
-  function toggle() {
-    if (variant) {
-      $('#variant_id').val(variant);
-      $('button[type=submit]').attr('disabled', false).fadeTo(0, 1);
-    } else {
-      $('#variant_id').val('');
-      $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
-    }    
+    return btns.fadeTo(0, 1).removeClass('locked').addClass('enabled').unbind('click').click(handle_click);
   }
   
   function advance() {
-    index++;
-    enable(set_buttons());
-    enable($('a.option-value.out-of-stock').removeClass('out-of-stock'));
-    toggle();
+    index++
+    update();
+    enable(buttons);
   }
   
-  function set_buttons() {
-    return buttons = $(values[index]).find('a.option-value');
+  function get_index(parent) {
+    return parseInt($(parent).attr('class').replace(/[^\d]/g, ''));
   }
   
-  function find_variant() {
-    var ids = [], i = selected.length
-    while(i--) {
-      ids = ids.concat(Object.keys(selected[i]));
-    }
-    matches = Array.find_matches(ids);
-    if (matches) {
-      variant = matches[0];
-      inventory = selected[selected.length - 1][variant];
-    } else {
-      variant = false;
-      inventory = 0;
-    }
-  }
-  
-  function cancel_click(evt) {
+  function handle_clear(evt) {
     evt.preventDefault();
+    update(get_index(this));
+    enable(buttons.removeClass('selected'));
+    parent.nextAll().each(function(index, element) {
+      disable($(element).find('a.option-value').addClass('locked').unbind('click'));
+      $(element).find('a.clear-button').hide();
+    });
   }
   
   function handle_click(evt) {
     evt.preventDefault();
-    var ids = this.rel.split("-");
-        
-    disable(buttons.not(this).removeClass('selected'));
-    var a = enable($(this).addClass('selected'));
-    
-    // backtrack
-    var parent_index = get_index(this);
-    
-    console.log(parent, parent_index, index);
-    
-    if (parent_index < index) {
-      //parent.find('.clear-button').hide();
-      index = parent_index;      
-      selected = selected.slice(0, index);
-      set_buttons();
-      disable(buttons.not(this));
-    } else {
-      //parent.find('.clear-button').show();
+    var a = $(this);
+    if (!parent.has(a).length) {
+      update( divs.index(a.parents('.variant-options:first')) ); 
     }
-    //parent.find('.clear-button').show();
-
-    
-    try {
-      var _ids, _vids, vids = options[ids[0]][ids[1]];   
-      selected[index] = vids;
-      find_variant();
-      //console.log('found?', variant, inventory);
-      if (variant === false) {
-        advance();
-        var keys = Object.keys(vids);
-        buttons.each(function(i, element) {
-          _ids = element.rel.split("-");
-          _vids = options[_ids[0]][_ids[1]]
-          keys = keys.concat(Object.keys(_vids));
-          matches = Array.find_matches(keys);
-          if (matches) {
-            var i = matches.length;
-            while (i--) {
-              if (_vids[matches[i]] <= 0) {
-                out_of_stock(element);
-              }
-            };
-          }
-        });
-      } else if (inventory == 0) {
-        // shouldn't really ever get here...
-        alert('out of stock!');
-      } else {
-        toggle();
-      }
-    } catch(error) {
-      if (!(window.console && window.console.log)) { return }
-      console.log("Type / Value " + this.rel + " combination could not be found");
-      console.log(error);
-    }
+    disable(buttons);
+    var a = enable(a.addClass('selected'));
+    parent.find('a.clear-button').css('display', 'block');
+    advance();    
   }
   
   $(document).ready(init);

@@ -34,8 +34,9 @@
 }
 
 .option-value.selected,
-.option-value.enabled:hover {
-  background-color: #1072B9;
+.option-value:hover {
+  background-color: #1491EB;
+  border-color: #1072B9;
   color: #fff;
 }
 .option-value.out-of-stock,
@@ -44,4 +45,11 @@
   background-color: #eee;
   color: #aaa;
   cursor: default;
+}
+
+.option-value.locked,
+.option-value.locked:hover {
+  background-color: #eee;  
+  border-color: #ccc;
+  color: #aaa;
 }
