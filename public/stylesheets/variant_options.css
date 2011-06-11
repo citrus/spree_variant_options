@@ -15,22 +15,35 @@
 }
 .variant-option-values li a {
   display: block;
-  border: 1px solid #ddd;  
+  background-color: #f9f9f9;
+  border: 2px solid #eee;  
   padding: 2px 9px;
   margin: 3px 3px 0 0;
   text-decoration: none;
   cursor: pointer;
+  
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+
 }
 .variant-option-values li.clear {
   border: 0;
   float: none;
   clear: both;
 }
-.variant-option-values li.clear-option a.clear-button {
+
+li.clear-option a.clear-button {
   display: none;
   font-weight: bold;
-  background-color: #eee;
+  background-color: #fff;
+  border-color: #FDE2E2;
   color: #c00e0e;
+}
+li.clear-option a.clear-button:hover {
+  border-color: #c00e0e;
+  background-color: #EF2E2E;
+  color: #fff;
 }
 
 .option-value.selected,
@@ -42,14 +55,14 @@
 .option-value.out-of-stock,
 .option-value.out-of-stock:hover {
   display: block;  
-  background-color: #eee;
+  background-color: #f9f9f9;
   color: #aaa;
   cursor: default;
 }
 
 .option-value.locked,
 .option-value.locked:hover {
-  background-color: #eee;  
-  border-color: #ccc;
+  background-color: #efefef;  
+  border-color: #ddd;
   color: #aaa;
 }
