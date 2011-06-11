@@ -47,22 +47,22 @@ li.clear-option a.clear-button:hover {
 }
 
 .option-value.selected,
-.option-value:hover {
+.option-value.in-stock:hover {
   background-color: #1491EB;
   border-color: #1072B9;
   color: #fff;
 }
-.option-value.out-of-stock,
-.option-value.out-of-stock:hover {
-  display: block;  
-  background-color: #f9f9f9;
+.option-value.out-of-stock {
+  display: block;
+  background: transparent url(/images/out-of-stock.png) 0 0 repeat;
   color: #aaa;
   cursor: default;
 }
 
 .option-value.locked,
 .option-value.locked:hover {
-  background-color: #efefef;  
-  border-color: #ddd;
-  color: #aaa;
+  background-color: #fff;  
+  border-color: #f0f0f0;
+  color: #ddd;
+  cursor: default;
 }

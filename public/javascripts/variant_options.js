@@ -29,7 +29,7 @@ function VariantOptions(options) {
     divs = $('#product-variants .variant-options'); 
     disable(divs.find('a.option-value').addClass('locked'));
     update();
-    enable(parent.find('a.option-value').removeClass('selected'));
+    enable(parent.find('a.option-value'));
     toggle();
     $('.clear-option a.clear-button').hide().click(handle_clear);
   }
@@ -42,47 +42,67 @@ function VariantOptions(options) {
   }
   
   function disable(btns) {
-    return btns.removeClass('enabled').removeClass('selected').fadeTo(0, 0.5);
+    return btns.removeClass('selected');
   }
   
   function enable(btns) {
-    return btns.fadeTo(0, 1).removeClass('locked').addClass('enabled').unbind('click').click(handle_click);
+    return btns.removeClass('locked').unbind('click').filter('.in-stock').click(handle_click);
   }
   
   function advance() {
     index++
     update();
-    enable(buttons);
+    inventory(buttons.removeClass('locked'));
+    enable(buttons.filter('.in-stock'));
+  }
+  
+  function inventory(btns) {
+    var selected = divs.find('a.selected');
+    var rels, selected_rels = $.map(selected, function(i) { return i.rel });
+    btns.removeClass('in-stock out-of-stock').each(function(i, element) {
+      var obj;
+      rels = [element.rel].concat(selected_rels);
+      obj = get_variant_object(rels);
+      if (obj.count < 1) {
+        disable($(element).addClass('out-of-stock').unbind('click'));
+      } else {
+        $(element).addClass('in-stock');
+      }
+    });
+  }
+  
+  function get_variant_object(rels) {
+    var i, ids, obj, objects = [];
+    if (typeof(ids) == 'string') { 
+      rels = [rels];
+    }
+    i = rels.length;
+    while (i--) {
+      try {
+        ids = rels[i].split('-');
+        obj = options[ids[0]][ids[1]];
+        objects.push(obj)
+      } catch(error) {
+        console.log(error);
+      }
+    }
+    try {
+      ids = $.map(objects, function(i) { return Object.keys(i); });
+      obj = objects[0][(Array.find_matches(ids) || [])[0]];
+    } catch(error) {
+      obj = null;
+      console.log(error);
+    } 
+    return obj;
   }
   
   function find_variant() {
     var selected = divs.find('a.selected');
-    if (selected.length != divs.length) { return };
-    var _var, ids, matches, variants, variant_ids = [];
-    selected.each(function(i, element) {
-      try {
-        ids = element.rel.split('-')
-        _var = options[ids[0]][ids[1]];
-        variants = _var;
-        variant_ids = variant_ids.concat(Object.keys(_var));
-      } catch(error) {
-        alert(error);
-      }
-    });
-    matches = Array.find_matches(variant_ids);
-    if (matches.length == 1) { 
-      variant = variants[matches[0]];
-      variant.id = matches[0];
-      console.log(variant);
-      if (variant.count == 0) {
-        alert('out of stock');
-      } else {
-        return variant;
-      }
-    }
-    return false;
+    if (selected.length == divs.length) {
+      return get_variant_object($.map(selected, function(i) { return i.rel }));
+    };
   }
-  
+    
   function toggle() {
     if (variant) {
     
@@ -101,6 +121,7 @@ function VariantOptions(options) {
   }
   
   function clear(i) {
+    variant = null;
     update(i);
     enable(buttons.removeClass('selected'));
     toggle();
@@ -126,7 +147,7 @@ function VariantOptions(options) {
     var a = enable(a.addClass('selected'));
     parent.find('a.clear-button').css('display', 'block');
     advance();
-    if (find_variant()) {
+    if (variant = find_variant()) {
       toggle();
     }
   }
