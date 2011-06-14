@@ -4,6 +4,14 @@ if (!Object.keys) Object.keys = function(o) {
   for(p in o) if(Object.prototype.hasOwnProperty.call(o,p)) ret.push(p);
   return ret;
 }
+if (!Array.indexOf) Array.prototype.indexOf = function(obj) {
+  for(var i = 0; i < this.length; i++){
+    if(this[i] == obj) {
+      return i;
+    }
+  }
+  return -1;
+}
 if (!Array.find_matches) Array.find_matches = function(a) {
   var i, m = [];
   a = a.sort();
@@ -18,7 +26,6 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   }
   return m;
 }
-
 
 function VariantOptions(options) {
   
@@ -61,60 +68,71 @@ function VariantOptions(options) {
   }
   
   function inventory(btns) {
-    var selected = divs.find('a.selected');
-    var rels, selected_rels = $.map(selected, function(i) { return i.rel });
+    var count = 0, selected = [];
+    var vars = get_variant_objects(divs.find('a.selected:last').attr('rel'));
+    selected = Object.keys(vars);
     btns.removeClass('in-stock out-of-stock unavailable').each(function(i, element) {
-      var obj;
-      rels = [element.rel].concat(selected_rels);
-      obj = get_variant_object(rels);
-      if (!obj) {
+      var variants = get_variant_objects(element.rel);
+      $.each(variants, function(key, value) { 
+        if (selected.indexOf(key) < 0) {
+          variants[key] = null;
+          delete variants[key];          
+        } else {
+          count += variants[key].count;
+        }
+      });
+      var keys = Object.keys(variants);
+      if (keys.length == 0) {
         disable($(element).addClass('unavailable locked').unbind('click'));
-      } else if (obj.count < 1) {
-        disable($(element).addClass('out-of-stock').unbind('click'));
+      } else if (keys.length == 1) {
+        _var = variants[keys[0]];
+        $(element).addClass(_var.count ? 'in-stock' : 'out-of-stock');
       } else {
-        $(element).addClass('in-stock');
+        console.log('multiple!', count);
+        $(element).addClass(count ? 'in-stock' : 'out-of-stock');        
       }
     });
   }
   
-  function get_variant_object(rels) {
-    var i, ids, obj, objects = [];
-    if (typeof(ids) == 'string') { 
-      rels = [rels];
-    }
+  function get_variant_objects(rels) {
+    var i, ids, obj, count = 0, objects = {}, variants = {};
+    if (typeof(rels) == 'string') { rels = [rels]; }
+    var otid, ovid, opt, opv;
     i = rels.length;
-    while (i--) {
-      try {
-        ids = rels[i].split('-');
-        obj = options[ids[0]][ids[1]];
-        objects.push(obj)
-      } catch(error) {
-        _log(error);
-      }
-    }
     try {
-      ids = $.map(objects, function(i) { return Object.keys(i); });
-      i = (Array.find_matches(ids) || [])[0];
-      obj = objects[objects.length - 1][i];
-      if (!obj) return;
-      obj.id = i;
+      while (i--) {
+        ids = rels[i].split('-');
+        otid = ids[0];
+        ovid = ids[1];
+        opt = options[otid];
+        if (opt) {
+          opv = opt[ovid];
+          ids = Object.keys(opv);
+          if (opv && ids.length) {
+            var j = ids.length;
+            while (j--) {
+              obj = opv[ids[j]];
+              variants[obj.id] = opv[ids[j]];
+            }
+          }
+        }
+      }
     } catch(error) {
-      obj = null;
       _log(error);
-    } 
-    return obj;
+    }    
+    return variants;
   }
   
   function find_variant() {
     var selected = divs.find('a.selected');
     if (selected.length == divs.length) {
-      return variant = get_variant_object($.map(selected, function(i) { return i.rel }));
+      return variant = get_variant_objects($.map(selected, function(i) { return i.rel }));
     };
   }
       
   function toggle() {
-    console.log('variant:', variant);
     if (variant) {
+      console.log('variant:', variant);
       $('#variant_id').val(variant.id);
       $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
     } else {

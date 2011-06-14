@@ -1,7 +1,9 @@
+require 'pp'
+
 Product.class_eval do
 
   def option_values
-    vals = option_types.map{|i| i.option_values }.flatten.uniq
+    option_types.map{|i| i.option_values }.flatten.uniq
   end
   
   def grouped_option_values
@@ -15,10 +17,12 @@ Product.class_eval do
         [value.id.inspect, Hash[variants.includes(:option_values).select{ |variant| 
           variant.option_values.select{ |val| 
             val.id == value.id && val.option_type_id == type.id 
-          }.length == 1 }.map{ |v| [ v.id, { :count => v.count_on_hand, :price => v.price } ] }]
+          }.length == 1 }.map{ |v| [ v.id, { :id => v.id, :count => v.count_on_hand, :price => v.price } ] }]
         ]
       }]]
     }]
+    pp @variant_options_hash
+    @variant_options_hash
   end
   
 end
