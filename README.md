@@ -1,14 +1,44 @@
 Spree Variant Options
 =====================
 
-... is going to be pretty awesome.
+spree_variant_options is a very simple spree extension that breaks your variants down into their option types and option values. To get a better idea let's let a few images do the explaining.
 
+
+#### When no selection has been made:
+![Spree Variant Options - 1](http://spree-docs.s3.amazonaws.com/spree_variant_options/1.jpg)
+
+#### After "Medium" is selected, "Medium Blue" is out of stock:
+
+![Spree Variant Options - 2](http://spree-docs.s3.amazonaws.com/spree_variant_options/2.jpg)
+
+#### And after "Green" is selected:
+![Spree Variant Options - 3](http://spree-docs.s3.amazonaws.com/spree_variant_options/3.jpg)
+
+To see it in action, follow the steps for "Demo" below.
 
 
 Installation
 ------------
 
-Don't do this quite yet...
+If you don't already have an existing Spree site, [click here](https://gist.github.com/946719) then come back later... You can also read the Spree docs [here](http://spreecommerce.com/documentation/getting_started.html)...
+
+spree_variant_options hasn't been released to rubygems so you'll have to install it from the source. Just add the following to your Gemfile:
+
+    gem 'spree_variant_options', :git => 'git://github.com/citrus/spree_variant_options.git'  
+  
+Now, bundle up with:
+
+    bundle
+
+spree_variant_options doesn't require any rake tasks or generators, but you'll need include `app/views/products/_variant_options.html.erb` in your product show view.
+
+If you don't have a custom version of `_cart_form.html.erb` in your application, then don't worry about a thing, spree_variant_options will include the partial for you. Otherwise, just replace the entire `<% if @product.has_variants? %>` block with `<%= render 'variant_options', :variants => @product.variants %>`.
+
+
+Versions
+--------
+
+spree_variant_options works on Spree 0.30.1 and above... Please let me know if you run into any issues.
 
 
 Testing
