@@ -98,4 +98,11 @@ Feature: Products should have variant options
     Then I should see "$24.99" in the price
     And the add to cart button should be enabled
     
-  
+  Scenario: Should show variant images when a selection is made
+    Given I have a product with variants
+    And I'm on the product page for the first product
+    When I follow "Small" within the first set of options
+    And I follow "Green" within the second set of options
+    Then the add to cart button should be enabled
+    And I should see "Small Green" in the variant images label # its hidden but it's there!
+    

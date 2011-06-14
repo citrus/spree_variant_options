@@ -8,6 +8,7 @@ def get_parent(parent)
     when "flash notice";  ".flash"
     when "first set of options"; "#option_type_#{@product.option_types.first.id}"
     when "second set of options"; "#option_type_#{@product.option_types[1].id}"
+    when "variant images label"; "#variant-images"
     when "price"; ".prices .price"    
     else "[set-your-parent] #{parent}"
   end
