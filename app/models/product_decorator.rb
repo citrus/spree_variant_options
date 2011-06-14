@@ -1,5 +1,3 @@
-require 'pp'
-
 Product.class_eval do
 
   def option_values
@@ -21,7 +19,6 @@ Product.class_eval do
         ]
       }]]
     }]
-    pp @variant_options_hash
     @variant_options_hash
   end
   
