@@ -131,6 +131,10 @@ function VariantOptions(options) {
     return variants;
   }
   
+  function to_f(string) {
+    return parseFloat(string.replace(/[^\d\.]/g, ''));
+  }
+  
   function find_variant() {
     var selected = divs.find('a.selected');
     var variants = get_variant_objects(selected.get(0).rel);
@@ -139,7 +143,13 @@ function VariantOptions(options) {
     } else {
       var prices = [];
       $.each(variants, function(key, value) { prices.push(value.price) });
-      prices = prices.sort();
+      
+      // need to fix for safari / firefox.
+      // they seem to be opposite of each other.. wtf?
+      prices = prices.sort(function(a, b) {
+        return a == b ? 0 : to_f(a) > to_f(b) ? -1 : 1;
+      });
+      
       if ($.unique(prices).length == 1) {
         $('.prices .price').html('<span class="price assumed">' + prices[0] + '</span>');  
       } else { 
@@ -172,6 +182,7 @@ function VariantOptions(options) {
       $(element).find('a.clear-button').hide();
     });
   }
+   
   
   function handle_clear(evt) {
     evt.preventDefault();
