@@ -22,7 +22,8 @@ Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   @variant.update_attributes(:count_on_hand => 0)
 end
 
-Given /^I have an? "([^"]*)" variant$/ do |descriptor|
+Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
+  price = price ? price.gsub(/[^\d\.]/, '').to_f : 10.00
   values = descriptor.split(" ")
   flunk unless @product && values.length == @product.option_types.length
   @variant = variant_by_descriptor(descriptor)
@@ -32,7 +33,7 @@ Given /^I have an? "([^"]*)" variant$/ do |descriptor|
     val = OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase) 
     values[index] = val
   end
-  @variant = Factory.create(:variant, :product => @product, :option_values => values)
+  @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
   @product.reload
 end
 
