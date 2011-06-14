@@ -48,7 +48,7 @@ Feature: Products should have variant options
     And I follow "Green" within the second set of options
     Then the add to cart button should be enabled
     And I click the last clear button
-    Then I should see "Small" selected in the first set of options
+    Then I should see "Small" selected within the first set of options
     And I should see enabled links for the second option type
     And the add to cart button should be disabled
           
@@ -73,4 +73,12 @@ Feature: Products should have variant options
     And I press "Add To Cart"
     Then I should be on the cart page
     And I should see "Size: Small, Color: Green"
-        
+    
+  Scenario: Should auto-select one variant products
+    Given I have a product with variants
+    And I have an "XXL Turquoise" variant
+    And I'm on the product page for the first product
+    When I follow "XXL" within the first set of options
+    Then I should see "Turquoise" selected within the second set of options
+    And the add to cart button should be enabled
+      

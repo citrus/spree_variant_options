@@ -1,6 +1,11 @@
 #product-variants {
   
 }
+
+#product-details .price.unselected {
+  color: #bbb;  
+}
+
 .variant-option-type {
   margin-bottom: 0;
 }
@@ -21,18 +26,15 @@
   margin: 3px 3px 0 0;
   text-decoration: none;
   cursor: pointer;
-  
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-
 }
 .variant-option-values li.clear {
   border: 0;
   float: none;
   clear: both;
 }
-
 li.clear-option a.clear-button {
   display: none;
   font-weight: bold;
@@ -45,7 +47,6 @@ li.clear-option a.clear-button:hover {
   background-color: #EF2E2E;
   color: #fff;
 }
-
 .option-value.selected,
 .option-value.in-stock:hover {
   background-color: #1491EB;
@@ -58,7 +59,6 @@ li.clear-option a.clear-button:hover {
   color: #aaa;
   cursor: default;
 }
-
 .option-value.locked,
 .option-value.locked:hover {
   background-color: #fff;  

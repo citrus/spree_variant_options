@@ -1,4 +1,15 @@
 #===============================
+# Helpers
+
+def variant_by_descriptor(descriptor)
+  values = descriptor.split(" ")
+  values.map! { |word| OptionValue.find_by_presentation(word) rescue nil }.compact!
+  return if values.blank?
+  @product.variants.includes(:option_values).select{|i| i.option_value_ids.sort == values.map(&:id) }.first
+end
+
+
+#===============================
 # Givens
 
 Given /^I have a product( with variants)?$/ do |has_variants|
@@ -7,11 +18,24 @@ end
 
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
-  values = descriptor.split(" ")
-  values.map! { |word| OptionValue.find_by_presentation(word) }
-  variant = @product.variants.includes(:option_values).select{|i| i.option_value_ids.sort == values.map(&:id) }.first
-  @variant = variant if variant.update_attributes(:count_on_hand => 0)
+  @variant = variant_by_descriptor(descriptor)
+  @variant.update_attributes(:count_on_hand => 0)
 end
+
+Given /^I have an? "([^"]*)" variant$/ do |descriptor|
+  values = descriptor.split(" ")
+  flunk unless @product && values.length == @product.option_types.length
+  @variant = variant_by_descriptor(descriptor)
+  return @variant if @variant
+  @product.option_type_ids.each_with_index do |otid, index|
+    word = values[index]
+    val = OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase) 
+    values[index] = val
+  end
+  @variant = Factory.create(:variant, :product => @product, :option_values => values)
+  @product.reload
+end
+
 
 #===============================
 # Whens
@@ -76,10 +100,17 @@ Then /^I should see an (out-of|in)-stock link for "([^"]*)"$/ do |state, button|
   end
 end
 
-Then /^I should see "([^"]*)" selected in the first set of options$/ do |button|
-  link = find_link(button)
-  assert_not_nil link
-  assert link.native.attribute("class").include?("selected")
+Then /^I should see "([^"]*)" selected within the (first|second|last) set of options$/ do |button, group|
+  parent = case group
+    when 'first'; '.variant-options.index-0'
+    when 'second'; '.variant-options.index-1'
+    when 'last'; ".variant-options.index-#{@product.option_values.length - 1}"
+  end
+  within parent do
+    link = find_link(button)
+    assert_not_nil link
+    assert link.native.attribute("class").include?("selected")
+  end
 end
 
 Then /^I should not see a selected option$/ do

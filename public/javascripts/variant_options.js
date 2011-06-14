@@ -61,7 +61,7 @@ function VariantOptions(options) {
   }
   
   function enable(btns) {
-    return btns.not('.unavailable').removeClass('locked').unbind('click').filter('.in-stock').click(handle_click);
+    return btns.not('.unavailable').removeClass('locked').unbind('click').filter('.in-stock').click(handle_click).filter('.auto-click').removeClass('auto-click').click();
   }
   
   function advance() {
@@ -92,7 +92,7 @@ function VariantOptions(options) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
         _var = variants[keys[0]];
-        $(element).addClass(_var.count ? 'in-stock' : 'out-of-stock');
+        $(element).addClass(_var.count ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');        
       } else {
         $.each(variants, function(key, value) { count += value.count });
         $(element).addClass(count ? 'in-stock' : 'out-of-stock');        
@@ -126,25 +126,39 @@ function VariantOptions(options) {
         }
       }
     } catch(error) {
-      _log(error);
+      //console.log(error);
     }    
     return variants;
   }
   
   function find_variant() {
     var selected = divs.find('a.selected');
+    var variants = get_variant_objects(selected.get(0).rel);
     if (selected.length == divs.length) {
-      return variant = selection[0];
-    };
+      return variant = variants[selection[0]];
+    } else {
+      var prices = [];
+      $.each(variants, function(key, value) { prices.push(value.price) });
+      prices = prices.sort();
+      if ($.unique(prices).length == 1) {
+        $('.prices .price').html('<span class="price assumed">' + prices[0] + '</span>');  
+      } else { 
+        $('.prices .price').html('<span class="price from">' + prices[0] + '</span> - <span class="price to">' + prices[prices.length - 1] + '</span>');
+      }
+         
+      return false;
+    }
   }
       
   function toggle() {
     if (variant) {
-      $('#variant_id').val(variant);
+      $('#variant_id').val(variant.id);
+      $('.prices .price').removeClass('unselected').text(variant.price);      
       $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
     } else {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
+      $('.prices .price').addClass('unselected').text('(select)');
     }    
   }
   
@@ -180,12 +194,7 @@ function VariantOptions(options) {
       toggle();
     }
   }
-  
-  function _log(msg) {
-    //if (!(window.console && window.console.log)) return;
-    //console.log(msg);
-  }
-  
+    
   $(document).ready(init);
   
 };
