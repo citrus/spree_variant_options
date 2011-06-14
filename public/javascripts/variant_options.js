@@ -160,6 +160,11 @@ function VariantOptions(options) {
       $('#variant_id').val(variant.id);
       $('.prices .price').removeClass('unselected').text(variant.price);      
       $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
+      try {
+        select_variant(variant.id, $.map($('a.selected'), function(i) { return $(i).text() }).join(" "));
+      } catch(error) {
+        // depends on modified version of product.js  
+      }
     } else {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
