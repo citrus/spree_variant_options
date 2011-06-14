@@ -1,9 +1,11 @@
-if (!Object.keys) Object.keys = function(o) {
-  if (o !== Object(o)) throw new TypeError('Object.keys called on non-object');
-  var ret=[],p;
-  for(p in o) if(Object.prototype.hasOwnProperty.call(o,p)) ret.push(p);
-  return ret;
-}
+$.extend({
+  keys: function(obj){
+    var a = [];
+    $.each(obj, function(k){ a.push(k) });
+    return a;
+  }
+});
+
 if (!Array.indexOf) Array.prototype.indexOf = function(obj) {
   for(var i = 0; i < this.length; i++){
     if(this[i] == obj) {
@@ -12,6 +14,7 @@ if (!Array.indexOf) Array.prototype.indexOf = function(obj) {
   }
   return -1;
 }
+
 if (!Array.find_matches) Array.find_matches = function(a) {
   var i, m = [];
   a = a.sort();
@@ -63,7 +66,7 @@ function VariantOptions(options) {
   
   function advance() {
     index++
-    update();
+    update();    
     inventory(buttons.removeClass('locked'));
     enable(buttons.filter('.in-stock'));
   }
@@ -74,7 +77,7 @@ function VariantOptions(options) {
     $.each(sels, function(key, value) {
       key = value.split('-');
       var v = options[key[0]][key[1]];
-      keys = Object.keys(v);
+      keys = $.keys(v);
       var m = Array.find_matches(selection.concat(keys));
       if (selection.length == 0) {
         selection = keys;
@@ -83,8 +86,8 @@ function VariantOptions(options) {
       }
     });
     btns.removeClass('in-stock out-of-stock unavailable').each(function(i, element) {
-      variants = get_variant_objects(element.rel, selection);
-      keys = Object.keys(variants);
+      variants = get_variant_objects(element.rel);
+      keys = $.keys(variants);
       if (keys.length == 0) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
@@ -110,12 +113,12 @@ function VariantOptions(options) {
         opt = options[otid];
         if (opt) {
           opv = opt[ovid];
-          ids = Object.keys(opv);
+          ids = $.keys(opv);
           if (opv && ids.length) {
             var j = ids.length;
             while (j--) {
               obj = opv[ids[j]];
-              if (obj && Object.keys(obj).length && 0 <= selection.indexOf(obj.id)) {
+              if (obj && $.keys(obj).length && 0 <= selection.indexOf(obj.id.toString())) {
                 variants[obj.id] = obj;
               }
             }
@@ -179,8 +182,8 @@ function VariantOptions(options) {
   }
   
   function _log(msg) {
-    if (!(window.console && window.console.log)) return;
-    console.log(msg);
+    //if (!(window.console && window.console.log)) return;
+    //console.log(msg);
   }
   
   $(document).ready(init);
