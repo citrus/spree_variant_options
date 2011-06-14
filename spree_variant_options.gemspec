@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency('spree_core', '>= 0.30.1')
   
   # Development
-  s.add_development_dependency('spree_sample',     '>= 0.60.0')
+  s.add_development_dependency('spree_sample',     '>= 0.30.1')
   s.add_development_dependency('dummier',          '>= 0.1.1')
   s.add_development_dependency('shoulda',          '>= 2.11.3')
   s.add_development_dependency('spork',            '>= 0.9.0.rc8')
