@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Spencer Steffen"]
   s.email       = ["spencer@citrusme.com"]
   s.homepage    = "https://github.com/citrus/spree_variant_options"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Spree Variant Options is a very simple Spree extension that breaks your variants down into their option types and option values.}
+  s.description = %q{Spree Variant Options is a very simple Spree extension that breaks your variants down into their option types and option values. Please see the documentation for more details.}
 
   s.rubyforge_project = "spree_variant_options"
 

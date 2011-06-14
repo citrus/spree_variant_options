@@ -11,7 +11,7 @@
     <% end %>
   <% end %>
 
-  <%= render 'variant_options', :variants => @product.variants %>
+  <%= render 'variant_options' %>
     
   <% if @product.has_stock? || Spree::Config[:allow_backorders] %>
     <%= text_field_tag (@product.has_variants? ? :quantity : "variants[#{@product.master.id}]"),
