@@ -22,13 +22,15 @@ Installation
 
 If you don't already have an existing Spree site, [click here](https://gist.github.com/946719) then come back later... You can also read the Spree docs [here](http://spreecommerce.com/documentation/getting_started.html)...
 
-Spree Variant Options hasn't been released to rubygems so you'll have to install it from the source. Just add the following to your Gemfile:
+To install Spree Variant Options, just add the following to your Gemfile:
 
-    gem 'spree_variant_options', :git => 'git://github.com/citrus/spree_variant_options.git'  
+    gem 'spree_variant_options', '0.1.0'
   
+
 Now, bundle up with:
 
     bundle
+
 
 Spree Variant Options doesn't require any rake tasks or generators, but you'll need include `app/views/products/_variant_options.html.erb` in your product show view.
 
