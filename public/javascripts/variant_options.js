@@ -143,19 +143,14 @@ function VariantOptions(options) {
     } else {
       var prices = [];
       $.each(variants, function(key, value) { prices.push(value.price) });
-      
-      // need to fix for safari / firefox.
-      // they seem to be opposite of each other.. wtf?
-      prices = prices.sort(function(a, b) {
-        return a == b ? 0 : to_f(a) > to_f(b) ? -1 : 1;
+      prices = $.unique(prices).sort(function(a, b) {
+        return to_f(a) < to_f(b) ? -1 : 1;
       });
-      
-      if ($.unique(prices).length == 1) {
+      if (prices.length == 1) {
         $('.prices .price').html('<span class="price assumed">' + prices[0] + '</span>');  
       } else { 
         $('.prices .price').html('<span class="price from">' + prices[0] + '</span> - <span class="price to">' + prices[prices.length - 1] + '</span>');
       }
-         
       return false;
     }
   }
