@@ -31,6 +31,7 @@ function VariantOptions(options) {
   
   var options = options;
   var variant, divs, parent, index = 0;
+  var selection = [];
   
   function init() {
     divs = $('#product-variants .variant-options'); 
@@ -68,34 +69,36 @@ function VariantOptions(options) {
   }
   
   function inventory(btns) {
-    var count = 0, selected = [];
-    var vars = get_variant_objects(divs.find('a.selected:last').attr('rel'));
-    selected = Object.keys(vars);
+    var keys, variants, count = 0, selected = {};
+    var sels = $.map(divs.find('a.selected'), function(i) { return i.rel });    
+    $.each(sels, function(key, value) {
+      key = value.split('-');
+      var v = options[key[0]][key[1]];
+      keys = Object.keys(v);
+      var m = Array.find_matches(selection.concat(keys));
+      if (selection.length == 0) {
+        selection = keys;
+      } else if (m) { 
+        selection = m;
+      }
+    });
     btns.removeClass('in-stock out-of-stock unavailable').each(function(i, element) {
-      var variants = get_variant_objects(element.rel);
-      $.each(variants, function(key, value) { 
-        if (selected.indexOf(key) < 0) {
-          variants[key] = null;
-          delete variants[key];          
-        } else {
-          count += variants[key].count;
-        }
-      });
-      var keys = Object.keys(variants);
+      variants = get_variant_objects(element.rel, selection);
+      keys = Object.keys(variants);
       if (keys.length == 0) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
         _var = variants[keys[0]];
         $(element).addClass(_var.count ? 'in-stock' : 'out-of-stock');
       } else {
-        console.log('multiple!', count);
+        $.each(variants, function(key, value) { count += value.count });
         $(element).addClass(count ? 'in-stock' : 'out-of-stock');        
       }
     });
   }
   
   function get_variant_objects(rels) {
-    var i, ids, obj, count = 0, objects = {}, variants = {};
+    var i, ids, obj, variants = {};
     if (typeof(rels) == 'string') { rels = [rels]; }
     var otid, ovid, opt, opv;
     i = rels.length;
@@ -112,7 +115,9 @@ function VariantOptions(options) {
             var j = ids.length;
             while (j--) {
               obj = opv[ids[j]];
-              variants[obj.id] = opv[ids[j]];
+              if (obj && Object.keys(obj).length && 0 <= selection.indexOf(obj.id)) {
+                variants[obj.id] = obj;
+              }
             }
           }
         }
@@ -126,14 +131,13 @@ function VariantOptions(options) {
   function find_variant() {
     var selected = divs.find('a.selected');
     if (selected.length == divs.length) {
-      return variant = get_variant_objects($.map(selected, function(i) { return i.rel }));
+      return variant = selection[0];
     };
   }
       
   function toggle() {
     if (variant) {
-      console.log('variant:', variant);
-      $('#variant_id').val(variant.id);
+      $('#variant_id').val(variant);
       $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
     } else {
       $('#variant_id').val('');
@@ -160,9 +164,10 @@ function VariantOptions(options) {
   function handle_click(evt) {
     evt.preventDefault();
     variant = null;
+    selection = [];
     var a = $(this);
     if (!parent.has(a).length) {
-      clear( divs.index(a.parents('.variant-options:first')) ); 
+      clear(divs.index(a.parents('.variant-options:first'))); 
     }
     disable(buttons);
     var a = enable(a.addClass('selected'));
