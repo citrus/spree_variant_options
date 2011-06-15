@@ -104,5 +104,6 @@ Feature: Products should have variant options
     When I follow "Small" within the first set of options
     And I follow "Green" within the second set of options
     Then the add to cart button should be enabled
-    And I should see "Small Green" in the variant images label # its hidden but it's there!
+    And I should see "Small Green" in the variant images label 
+    # its hidden but it's there!
     
