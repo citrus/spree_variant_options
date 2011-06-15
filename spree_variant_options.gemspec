@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Spencer Steffen"]
   s.email       = ["spencer@citrusme.com"]
   s.homepage    = "https://github.com/citrus/spree_variant_options"
-  s.summary     = %q{Spree Variant Options is a very simple spree extension that groups your variants by option types and values.}
-  s.description = %q{Spree Variant Options is a very simple spree extension that groups your variants by option types and values. Please see the documentation for more details.}
+  s.summary     = %q{Spree Variant Options is a very simple spree extension that replaces the radio-button variant selection with groups of option types and values.}
+  s.description = %q{Spree Variant Options is a very simple spree extension that replaces the radio-button variant selection with groups of option types and values. Please see the documentation for more details.}
 
   s.rubyforge_project = "spree_variant_options"
 
