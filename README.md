@@ -1,7 +1,7 @@
 Spree Variant Options
 =====================
 
-Spree Variant Options is a very simple spree extension that groups your variants by option types and values. To get a better idea let's let a few images do the explaining.
+Spree Variant Options is a very simple spree extension that replaces the radio-button variant selection with groups of option types and values. To get a better idea let's let a few images do the explaining.
 
 
 #### When no selection has been made:
