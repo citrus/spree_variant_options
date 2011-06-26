@@ -14,7 +14,7 @@
             <% if variants.empty? %>
               <% classes << "unavailable" %>
             <% else %>
-              <% classes << (variants.sum(&:count_on_hand) < 1 ? "out-of-stock" : "in-stock") %>
+              <% classes << ( Spree::Config[:allow_backorders] || variants.sum(&:count_on_hand) > 0 ? "in-stock" : "out-of-stock" ) %>
             <% end %>
           <% end %>
           <li>       
