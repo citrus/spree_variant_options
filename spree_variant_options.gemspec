@@ -29,9 +29,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency('spork',            '>= 0.9.0.rc8')
   s.add_development_dependency('spork-testunit',   '>= 0.0.5')
   s.add_development_dependency('factory_girl',     '>= 2.0.0.beta2')
-	s.add_development_dependency('cucumber-rails',   '>= 0.4.1')
-	s.add_development_dependency('database_cleaner', '>= 0.6.7')
-	s.add_development_dependency('capybara',         '>= 0.4.1')
+  s.add_development_dependency('cucumber-rails',   '>= 0.4.1')
+  s.add_development_dependency('database_cleaner', '>= 0.6.7')
+  s.add_development_dependency('capybara',         '>= 0.4.1')
   s.add_development_dependency('sqlite3',          '>= 1.3.3')
 
 end
