@@ -4,5 +4,5 @@
 Gemfile.lock
 pkg/*
 public/tmp.html
-lib/dummy_hooks/after_migrate.rb
+test/dummy_hooks/after_migrate.rb
 test/dummy

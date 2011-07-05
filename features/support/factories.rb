@@ -32,14 +32,14 @@ FactoryGirl.define do
   factory :option_type do
     presentation "Size"
     name { presentation.downcase }
-    sequence(:position) {|n| n }
+    #sequence(:position) {|n| n }
   end
   
   factory :option_value do
     presentation "Large"
     name { presentation.downcase }
     option_type { OptionType.last || Factory.create(:option_type) }
-    sequence(:position) {|n| n }
+    #sequence(:position) {|n| n }
   end
 
 end
