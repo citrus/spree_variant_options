@@ -1,4 +1,4 @@
-@wip @no-txn @javascript
+@no-txn @javascript
 Feature: Products should have variant options
   
   A Product's variants should be broken out into options
