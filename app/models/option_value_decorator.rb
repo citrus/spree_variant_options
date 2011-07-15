@@ -1,4 +1,6 @@
 OptionValue.class_eval do
+
+  default_scope order(:position)
     
   if defined?(SpreeHeroku)
     has_attached_file :image, 
