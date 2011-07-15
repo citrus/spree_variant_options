@@ -23,5 +23,6 @@ end
 Spork.each_run do
 
   Dir["#{File.expand_path("../../../", __FILE__)}/test/support/**/*.rb"].each { |f| require f }
-  
+  World(HelperMethods)
+
 end

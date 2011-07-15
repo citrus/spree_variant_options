@@ -17,6 +17,8 @@ end
 
 Spork.each_run do
 
-  load File.expand_path("../../features/support/factories.rb", __FILE__)
+  #load File.expand_path("../../features/support/factories.rb", __FILE__)
+  Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+
 
 end

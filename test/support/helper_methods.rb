@@ -24,5 +24,3 @@ module HelperMethods
   end
   
 end
-
-World(HelperMethods)
