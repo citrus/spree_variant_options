@@ -22,9 +22,7 @@ module SpreeVariantOptions
       source_root File.expand_path("../../templates", __FILE__)
       
       def copy_migrations
-        
-        migration_template "db/migrate/add_image_to_option_values.rb", "db/migrate/add_image_to_option_values.rb"
-        
+        migration_template "db/migrate/add_image_to_option_values.rb", "db/migrate/add_image_to_option_values.rb"     
       end
 
     end
