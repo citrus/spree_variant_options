@@ -8,13 +8,35 @@ def variant_by_descriptor(descriptor)
   @product.variants.includes(:option_values).select{|i| i.option_value_ids.sort == values.map(&:id) }.first
 end
 
+def random_image
+  unless @sample_images
+    dir = File.expand_path("../../../test/dummy/db/sample/assets/*", __FILE__)
+    @sample_images = Dir[dir]
+  end
+  image = @sample_images.shuffle.first
+  File.open(image)
+end
 
 #===============================
 # Givens
 
-Given /^I have a product( with variants)?$/ do |has_variants|
-  @product = Factory.create(has_variants ? :product_with_variants : :product)
+Given /^I( don't)? allow backorders$/ do |dont|
+  Spree::Config.set(:allow_backorders => dont.nil?)
 end
+
+Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_images|
+  @product = Factory.create(has_variants ? :product_with_variants : :product)
+  unless has_images.nil?
+    @product.images.create(:attachment => random_image, :alt => @product.name)
+    unless has_variants.nil?
+      @product.variants.each do |v|
+        v.images.create(:attachment => random_image, :alt => v.sku)
+      end
+    end   
+  end
+end
+
+
 
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
@@ -55,7 +77,7 @@ end
 # Thens
 
 Then /^the source should contain the options hash$/ do
-  assert source.include?("VariantOptions(#{@product.variant_options_hash.to_json})")
+  assert source.include?("VariantOptions(#{@product.variant_options_hash.to_json}, #{Spree::Config[:allow_backorders]})")
 end
 
 Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type$/ do |state, option_type|
@@ -103,9 +125,9 @@ end
 
 Then /^I should see "([^"]*)" selected within the (first|second|last) set of options$/ do |button, group|
   parent = case group
-    when 'first'; '.variant-options.index-0'
+    when 'first';  '.variant-options.index-0'
     when 'second'; '.variant-options.index-1'
-    when 'last'; ".variant-options.index-#{@product.option_values.length - 1}"
+    when 'last';   ".variant-options.index-#{@product.option_values.length - 1}"
   end
   within parent do
     link = find_link(button)
