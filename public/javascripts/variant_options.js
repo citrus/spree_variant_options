@@ -30,9 +30,10 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   return m;
 }
 
-function VariantOptions(options) {
+function VariantOptions(options, allow_backorders) {
   
   var options = options;
+  var allow_backorders = allow_backorders;
   var variant, divs, parent, index = 0;
   var selection = [];
   
@@ -92,7 +93,9 @@ function VariantOptions(options) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
         _var = variants[keys[0]];
-        $(element).addClass(_var.count ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');        
+        $(element).addClass((allow_backorders || _var.count) ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');
+      } else if (allow_backorders) {
+        $(element).addClass('in-stock');
       } else {
         $.each(variants, function(key, value) { count += value.count });
         $(element).addClass(count ? 'in-stock' : 'out-of-stock');        
