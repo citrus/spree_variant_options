@@ -24,7 +24,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 
 To install Spree Variant Options, just add the following to your Gemfile:
 
-    gem 'spree_variant_options', '0.1.0'
+    gem 'spree_variant_options', '0.1.1'
   
 
 Now, bundle up with:
@@ -39,10 +39,14 @@ If you don't have a custom version of `_cart_form.html.erb` in your application,
     <%= render 'variant_options' %>
 
 
+To tie spree_variant_options in with your product photos just delete your local copy of `product.js` or copy spree_variant_options' `product.js` to your local `public/javascripts` directory.
+
+
+
 Versions
 --------
 
-Spree Variant Options works on Spree 0.30.1 and above... Please let me know if you run into any issues.
+Spree Variant Options works on Spree 0.30.x and above... Please let me know if you run into any issues.
 
 
 Testing
