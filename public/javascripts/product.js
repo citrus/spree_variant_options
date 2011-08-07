@@ -9,7 +9,7 @@ var add_image_handlers = function() {
   }).hover(function() {
     $('#main-image img').attr('src', $(this).attr('href').replace('mini', 'product'));
   }, function() {
-     $('#main-image img').attr('src', $("#main-image").data('selectedThumb'));
+    $('#main-image img').attr('src', $("#main-image").data('selectedThumb'));
   });
 };
  
@@ -29,6 +29,13 @@ var select_variant = function(vid, text) {
   jQuery("#main-image img").attr({src: jQuery(link).attr('href')});
   jQuery('ul.thumbnails li').removeClass('selected');
   jQuery(link).parent('li').addClass('selected');
+}
+
+var reset_variant = function() {
+  jQuery("#variant-thumbnails").empty();
+  jQuery("#variant-images span").empty();
+  jQuery("#variant-images").hide();
+  $('#main-image img').attr('src', $('#product-thumbnails li a').first().attr('href').replace('mini', 'product'));
 }
  
 jQuery(document).ready(function() {

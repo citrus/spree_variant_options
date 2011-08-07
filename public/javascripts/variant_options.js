@@ -172,6 +172,7 @@ function VariantOptions(options, allow_backorders) {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
       $('.prices .price').addClass('unselected').text('(select)');
+      reset_variant();
     }    
   }
   
@@ -185,7 +186,6 @@ function VariantOptions(options, allow_backorders) {
       $(element).find('a.clear-button').hide();
     });
   }
-   
   
   function handle_clear(evt) {
     evt.preventDefault();
