@@ -36,6 +36,7 @@ var reset_variant = function() {
   jQuery("#variant-images span").empty();
   jQuery("#variant-images").hide();
   $('#main-image img').attr('src', $('#product-thumbnails li a').first().attr('href').replace('mini', 'product'));
+  add_image_handlers();
 }
  
 jQuery(document).ready(function() {
