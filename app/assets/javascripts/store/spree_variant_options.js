@@ -30,6 +30,16 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   return m;
 }
 
+var select_variant = function(variant_id, text) {
+  show_variant_images(variant_id);
+  jQuery("#variant-images span").html(text);
+}
+
+var reset_variant = function() {
+  $('li.vtmb').hide();
+  $('li.tmb-all').show();
+}
+
 function VariantOptions(options, allow_backorders) {
   
   var options = options;
@@ -172,6 +182,7 @@ function VariantOptions(options, allow_backorders) {
       $('#variant_id').val('');
       $('button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
       $('.prices .price').addClass('unselected').text('(select)');
+      reset_variant();
     }    
   }
   
@@ -185,7 +196,6 @@ function VariantOptions(options, allow_backorders) {
       $(element).find('a.clear-button').hide();
     });
   }
-   
   
   function handle_clear(evt) {
     evt.preventDefault();
