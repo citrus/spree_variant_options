@@ -30,6 +30,16 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   return m;
 }
 
+var select_variant = function(variant_id, text) {
+  show_variant_images(variant_id);
+  jQuery("#variant-images span").html(text);
+}
+
+var reset_variant = function() {
+  $('li.vtmb').hide();
+  $('li.tmb-all').show();
+}
+
 function VariantOptions(options, allow_backorders) {
   
   var options = options;
