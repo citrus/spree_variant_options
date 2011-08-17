@@ -10,6 +10,10 @@ $('body').bind('variant_reset', function(ev) {
   console.log('reset')
 });
 
+$('body').bind('inventory_updated', function(ev, variants) {
+  console.log(variants)
+});
+
 */
 
 $.extend({
@@ -144,6 +148,7 @@ function VariantOptions(options, allow_backorders) {
         $(element).addClass(count ? 'in-stock' : 'out-of-stock');        
       }
     });
+    $.event.trigger('inventory_updated', [variants]);
   }
   
   function get_variant_objects(rels) {
