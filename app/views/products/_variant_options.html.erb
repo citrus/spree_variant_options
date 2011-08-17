@@ -17,8 +17,8 @@
               <% classes << ( Spree::Config[:allow_backorders] || variants.sum(&:count_on_hand) > 0 ? "in-stock" : "out-of-stock" ) %>
             <% end %>
           <% end %>
-          <li>       
-            <%= link_to content_tag(:span, value.presentation), "#", :title => value.presentation, :class => classes.join(" "), :rel => "#{type.id}-#{value.id}" %>
+          <li>
+            <%= link_to value.has_image? ? image_tag(value.image.url, :alt => value.presentation) : content_tag(:span, value.presentation), "#", :title => value.presentation, :class => classes.join(" "), :rel => "#{type.id}-#{value.id}" %>
           </li>
         <% end %>
           <li class="clear-option"><%= link_to "X", "#clear", :class => "clear-button clear-index-#{index}" %></li>

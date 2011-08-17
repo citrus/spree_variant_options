@@ -36,7 +36,18 @@ Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_
   end
 end
 
+Given /^the first option type has an option value with image "([^"]*)"$/ do |source|
+  flunk unless @product
+  @product.option_types.first.option_values.first.update_attributes(:image => File.open(Rails.root.join("public/images/#{source}")))
+end
 
+Then /^I should see image "([^"]*)" within the first option value$/ do |source|
+  ot = @product.option_types.first
+  ov = ot.option_values.first
+  within ".variant-options a[rel='#{ot.id}-#{ov.id}']" do
+    assert_match "/assets/option_values/#{ov.id}/small/#{source}", find("img").native.attribute("src")
+  end
+end
 
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product

@@ -5,7 +5,9 @@ require 'spork'
  
 Spork.prefork do
   require 'cucumber/rails'
+  require 'selenium/webdriver'
   require 'factory_girl'
+  
   
   I18n.reload!
   
@@ -18,6 +20,7 @@ Spork.prefork do
   DatabaseCleaner.strategy  = :transaction
   
   Spree::Config.set(:random => rand(1000))
+    
 end
  
 Spork.each_run do

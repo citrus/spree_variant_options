@@ -35,13 +35,15 @@ class OptionValueTest < ActiveSupport::TestCase
       setup do
         @path = @images.shuffle.first
         file = File.open(@path)
-        @option_value.image = file
-        @option_value.save
+        @option_value.update_attributes(:image => file)
         file.close
       end
       
-      should "have an images" do
+      should "have an image" do
         assert @option_value.has_image?
+      end
+      
+      should "have small large and original images" do
         dir = File.expand_path("../../dummy/public/assets/option_values/#{@option_value.id}", __FILE__)
         %w(small large original).each do |size|
           assert File.exists?(File.join(dir, size, File.basename(@path)))

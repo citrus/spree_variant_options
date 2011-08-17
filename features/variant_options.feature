@@ -1,8 +1,10 @@
-@no-txn @javascript
+@javascript
 Feature: Products should have variant options
   
-  A Product's variants should be broken out into options
- 
+  In order to purchase a product
+  As a customer
+  I want to select a variant
+  
   Scenario: Display options when visiting a product
     Given I have a product with variants
       And I'm on the product page for the first product
@@ -11,6 +13,12 @@ Feature: Products should have variant options
       And I should see disabled links for the second option type
       And I should have a hidden input for the selected variant
       And the add to cart button should be disabled
+  
+  Scenario: Display option images when visiting a product
+    Given I have a product with variants
+      And the first option type has an option value with image "spree.jpg"
+      And I'm on the product page for the first product
+    Then I should see image "spree.jpg" within the first option value
   
   Scenario: Interact with options for a product
     Given I have a product with variants
