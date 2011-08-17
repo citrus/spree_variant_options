@@ -24,7 +24,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 
 To install Spree Variant Options, just add the following to your Gemfile:
 
-    gem 'spree_variant_options', '0.1.1'
+    gem 'spree_variant_options', '0.2.0'
   
 
 Now, bundle up with:
@@ -32,7 +32,13 @@ Now, bundle up with:
     bundle
 
 
-Spree Variant Options doesn't require any rake tasks or generators, but you'll need include `app/views/products/_variant_options.html.erb` in your product show view.
+Next, run the install generator to copy the necessary migration to your project and migrate your database:
+
+    rails g spree_variant_options:install
+    rake db:migrate
+    
+    
+Finally, you'll need include `app/views/products/_variant_options.html.erb` in your `products#show` view...
 
 If you don't have a custom version of `_cart_form.html.erb` in your application, then don't worry about a thing, spree_variant_options will include the partial for you. Otherwise, just replace the entire `<% if @product.has_variants? %>` block with:
 
@@ -46,7 +52,7 @@ To tie spree_variant_options in with your product photos just delete your local 
 Versions
 --------
 
-Spree Variant Options works on Spree 0.30.x and above... Please let me know if you run into any issues.
+Spree Variant Options works on Spree 0.30.x through 0.60.x. 0.70.x compatibility is just around the corner... Please let me know if you run into any issues.
 
 
 Testing
@@ -124,7 +130,9 @@ You can easily use the test/dummy app as a demo of spree_variant_options. Just `
 Contributors
 ------------
 
-So far it's just me; Spencer Steffen. 
+* Spencer Steffen ([@citrus](https://github.com/citrus))
+* Richard Brown ([@rbrown](https://github.com/rbrown))
+* [@baracek](https://github.com/baracek)
 
 If you'd like to help out feel free to fork and send me pull requests!
 
