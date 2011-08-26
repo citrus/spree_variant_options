@@ -1,7 +1,7 @@
 <% if @product.has_variants? %>
   <div id="product-variants">
     <h2><%= t('variants') %></h2>
-        
+
     <% index = 0 %>
     <% @product.grouped_option_values.each do |type, values| %>
       <div id="<%= dom_id(type) %>" class="variant-options index-<%= index %>">
@@ -9,17 +9,10 @@
         <ul class="variant-option-values">
         <% values.each do |value| %>
           <% classes = ["option-value"] %>
-          <% if index == 0 %>
-            <% variants = @variants.select{|i| i.option_values.select{|j| j.option_type_id == type.id && j == value }.length == 1 } %>
-            <% if variants.empty? %>
-              <% classes << "unavailable" %>
-            <% else %>
-              <% classes << ( Spree::Config[:allow_backorders] || variants.sum(&:count_on_hand) > 0 ? "in-stock" : "out-of-stock" ) %>
-            <% end %>
+          <% unless (variants = @product.variants_for_option_value(value)).empty? %>
+          <% classes << ( Spree::Config[:allow_backorders] || variants.sum(&:count_on_hand) > 0 ? "in-stock" : "out-of-stock" ) %>
+          <li><%= link_to content_tag(:span, value.presentation), "#", :title => value.presentation, :class => classes.join(" "), :rel => "#{type.id}-#{value.id}" %></li>
           <% end %>
-          <li>       
-            <%= link_to content_tag(:span, value.presentation), "#", :title => value.presentation, :class => classes.join(" "), :rel => "#{type.id}-#{value.id}" %>
-          </li>
         <% end %>
           <li class="clear-option"><%= link_to "X", "#clear", :class => "clear-button clear-index-#{index}" %></li>
           <li class="clear"></li>
