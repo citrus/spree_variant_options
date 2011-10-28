@@ -227,7 +227,7 @@ function VariantOptions(options, allow_backorders) {
   function clear(i) {
     variant = null;
     update(i);
-    enable(buttons.removeClass('selected'));
+    enable(buttons.removeClass('selected').removeClass('locked').removeClass('unavailable'));
     toggle();
     parent.nextAll().each(function(index, element) {
       disable($(element).find('a.option-value').show().removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
