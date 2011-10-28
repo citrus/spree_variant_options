@@ -81,7 +81,7 @@ function VariantOptions(options, allow_backorders) {
   
   var options = options;
   var allow_backorders = allow_backorders;
-  var variant, divs, parent, index = 0;
+  var variant, divs, parent, buttons, index = 0;
   var selection = [];
   
   function init() {
@@ -256,6 +256,8 @@ function VariantOptions(options, allow_backorders) {
       toggle();
     }
   }
+  
+  this.clear = clear;
     
   $(document).ready(init);
   
