@@ -20,18 +20,18 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   
   # Runtime
-  s.add_dependency('spree_core', '>= 0.30.1')
+  s.add_dependency('spree_core', '>= 0.70.0')
   
   # Development
-  s.add_development_dependency('spree_sample',     '>= 0.30.1')
-  s.add_development_dependency('dummier',          '>= 0.2.0')
-  s.add_development_dependency('shoulda',          '>= 2.11.3')
-  s.add_development_dependency('factory_girl',     '>= 2.0.4')
-  s.add_development_dependency('cucumber-rails',   '>= 1.0.2')
+  s.add_development_dependency('spree_sample',     '>= 0.70.0')
+  s.add_development_dependency('dummier',          '>= 0.2.4')
+  s.add_development_dependency('shoulda',          '>= 3.0.0.beta2')
+  s.add_development_dependency('factory_girl',     '>= 2.3.2')
+  s.add_development_dependency('cucumber-rails',   '>= 1.2.1')
   s.add_development_dependency('database_cleaner', '>= 0.6.7')
   s.add_development_dependency('sqlite3',          '>= 1.3.4')
   s.add_development_dependency('spork',            '>= 0.9.0.rc9')
-  s.add_development_dependency('spork-testunit',   '>= 0.0.5')
+  s.add_development_dependency('spork-testunit',   '>= 0.0.7')
   s.add_development_dependency('turn',             '>= 0.8.2')
 
 end
