@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class OptionValueTest < ActiveSupport::TestCase
 
   setup do
-    @images = Dir[File.expand_path("../../dummy/db/sample/assets/*", __FILE__)]
+    @images = Dir[File.expand_path("../../support/images/*", __FILE__)]
   end
 
   should_have_attached_file :image
