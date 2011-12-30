@@ -19,8 +19,8 @@ Then /^I fill in the option value fields for (.*)$/ do |parent|
     %w(name presentation).each do |name|
       find(:xpath, ".//input[contains(@name, '[#{name}]')]").set('xxx-large')
     end
-    find(:xpath, ".//input[contains(@name, '[image]')]").set(Rails.root.join("public/images/spree.jpg"))
-  end  
+    find(:xpath, ".//input[contains(@name, '[image]')]").set(File.expand_path("../../../test/support/images/1.jpg", __FILE__))
+  end
 end
 
 

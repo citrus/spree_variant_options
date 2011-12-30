@@ -10,7 +10,7 @@ end
 
 def random_image
   unless @sample_images
-    dir = File.expand_path("../../../test/dummy/db/sample/assets/*", __FILE__)
+    dir = File.expand_path("../../../test/support/images/*", __FILE__)
     @sample_images = Dir[dir]
   end
   image = @sample_images.shuffle.first
@@ -22,6 +22,7 @@ end
 
 Given /^I( don't)? allow backorders$/ do |dont|
   Spree::Config.set(:allow_backorders => dont.nil?)
+  assert_equal dont.nil?, Spree::Config[:allow_backorders]
 end
 
 Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_images|
@@ -38,7 +39,7 @@ end
 
 Given /^the first option type has an option value with image "([^"]*)"$/ do |source|
   flunk unless @product
-  @product.option_types.first.option_values.first.update_attributes(:image => File.open(Rails.root.join("public/images/#{source}")))
+  @product.option_types.first.option_values.first.update_attributes(:image => File.open(Rails.root.join("../support/images/#{source}")))
 end
 
 Then /^I should see image "([^"]*)" within the first option value$/ do |source|
