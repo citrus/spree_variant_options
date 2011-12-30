@@ -24,7 +24,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 
 To install Spree Variant Options, just add the following to your Gemfile:
 
-    gem 'spree_variant_options', '0.2.0'
+    gem 'spree_variant_options', '0.3.0'
   
 
 Now, bundle up with:
