@@ -36,23 +36,13 @@ Next, run the install generator to copy the necessary migration to your project 
 
     rails g spree_variant_options:install
     rake db:migrate
-    
-    
-Finally, you'll need include `app/views/products/_variant_options.html.erb` in your `products#show` view...
-
-If you don't have a custom version of `_cart_form.html.erb` in your application, then don't worry about a thing, spree_variant_options will include the partial for you. Otherwise, just replace the entire `<% if @product.has_variants? %>` block with:
-
-    <%= render 'variant_options' %>
-
-
-To tie spree_variant_options in with your product photos just delete your local copy of `product.js` or copy spree_variant_options' `product.js` to your local `public/javascripts` directory.
 
 
 
 Versions
 --------
 
-Spree Variant Options works on Spree 0.30.x through 0.60.x. 0.70.x compatibility is just around the corner... Please let me know if you run into any issues.
+Spree Variant Options is compatible with Spree 0.30.x through 0.70.x. Please reference `Versionfile` for more details.
 
 
 Testing
@@ -64,42 +54,6 @@ Clone this repo to where you develop, bundle up, then run `dummier' to get the s
     cd spree_variant_options
     bundle install
     bundle exec dummier
-
-
-This will generate a fresh rails app in test/dummy, install spree & spree_variant_options, then migrate the test database. Sweet.
-
-
-### Spork + Cucumber
-
-To run the cucumber features, boot spork like this:
-
-    bundle exec spork
-
-Then, in another window, run:
-
-    cucumber --drb
-
-
-### Spork + Test::Unit
-    
-If you want to run shoulda tests, start spork with:
-
-    bundle exec spork TestUnit
-    #or 
-    bundle exec spork t
-        
-In another window, run all tests:
-
-    testdrb test/**/*_test.rb
-    
-Or just a specific test:
-
-    testdrb test/unit/supplier_test.rb
-  
-
-### No Spork
-
-If you don't want to spork, just use rake:
 
     # cucumber/capybara
     rake cucumber
