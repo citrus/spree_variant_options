@@ -1,5 +1,13 @@
-# install spree & spree_sample
-run "bundle exec rails g spree:site"
+# install spree & spree_variant_options
+run "rails g spree:site"
+run "rails g spree_variant_options:install"
 
-# install spree_variant_options
-run  "rails g spree_variant_options:install"
+# remove all stylesheets except core  
+%w(admin store).each do |ns|
+  js  = "app/assets/javascripts/#{ns}/all.js"
+  css = "app/assets/stylesheets/#{ns}/all.css"
+  remove_file js
+  remove_file css
+  template "#{ns}/all.js", js
+  template "#{ns}/all.css", css
+end
