@@ -1,4 +1,4 @@
-Product.class_eval do
+Spree::Product.class_eval do
 
   include ActionView::Helpers::NumberHelper
 

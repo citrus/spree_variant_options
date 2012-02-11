@@ -164,7 +164,7 @@ function VariantOptions(options, allow_backorders) {
       $('#product-price .price').removeClass('unselected').text(variant.price);      
       $('button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       try {
-        select_variant(variant.id, $.map($('a.selected'), function(i) { return $(i).text() }).join(" "));
+        show_variant_images(variant.id);
       } catch(error) {
         // depends on modified version of product.js  
       }
@@ -184,6 +184,7 @@ function VariantOptions(options, allow_backorders) {
       disable($(element).find('a.option-value').show().removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
       $(element).find('a.clear-button').hide();
     });
+    show_all_variant_images();
   }
    
   

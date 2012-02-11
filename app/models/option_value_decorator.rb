@@ -1,4 +1,4 @@
-OptionValue.class_eval do
+Spree::OptionValue.class_eval do
 
   default_scope order(:position)
     
