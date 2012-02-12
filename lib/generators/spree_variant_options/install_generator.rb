@@ -33,6 +33,15 @@ module SpreeVariantOptions
       def copy_migrations
         migration_template "db/migrate/add_image_to_option_values.rb", "db/migrate/add_image_to_option_values.rb"     
       end
+      
+      def add_javascripts
+        append_file "app/assets/javascripts/store/all.js", "//= require store/product_variant_options\n"
+        append_file "app/assets/javascripts/store/all.js", "//= require store/variant_options\n"
+      end
+
+      def add_stylesheets
+        inject_into_file "app/assets/stylesheets/store/all.css", " *= require store/variant_options\n", :before => /\*\//, :verbose => true
+      end
 
     end
   end
