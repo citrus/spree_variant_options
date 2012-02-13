@@ -17,81 +17,95 @@ Spree Variant Options is a very simple spree extension that replaces the radio-b
 To see it in action, follow the steps for "Demo" below.
 
 
+------------------------------------------------------------------------------
 Installation
-------------
+------------------------------------------------------------------------------
 
 If you don't already have an existing Spree site, [click here](https://gist.github.com/946719) then come back later... You can also read the Spree docs [here](http://spreecommerce.com/documentation/getting_started.html)...
 
 To install Spree Variant Options, just add the following to your Gemfile:
 
-    gem 'spree_variant_options', '0.3.0'
-  
+```ruby
+gem 'spree_variant_options', '0.3.0'
+```
 
 Now, bundle up with:
 
-    bundle
-
+```bash
+bundle
+```
 
 Next, run the install generator to copy the necessary migration to your project and migrate your database:
 
-    rails g spree_variant_options:install
-    rake db:migrate
+```bash
+rails g spree_variant_options:install
+rake db:migrate
+```
 
 
-
+------------------------------------------------------------------------------
 Versions
---------
+------------------------------------------------------------------------------
 
-Spree Variant Options is compatible with Spree 0.30.x through 0.70.x. Please reference `Versionfile` for more details.
+Spree Variant Options is compatible with Spree 0.30.x through 1.0.x. Please reference `Versionfile` for more details.
 
 
+------------------------------------------------------------------------------
 Testing
--------
+------------------------------------------------------------------------------
 
 Clone this repo to where you develop, bundle up, then run `dummier' to get the show started:
 
-    git clone git://github.com/citrus/spree_variant_options.git
-    cd spree_variant_options
-    bundle install
-    bundle exec dummier
+```bash
+git clone git://github.com/citrus/spree_variant_options.git
+cd spree_variant_options
+bundle install
+bundle exec dummier
 
-    # cucumber/capybara
-    rake cucumber
-    
-    # test/unit
-    rake test
-    
-    # both
-    rake 
-  
+# cucumber/capybara
+rake cucumber
+
+# test/unit
+rake test
+
+# both
+rake 
+```
+
 POW!
 
 
+------------------------------------------------------------------------------
 Demo
-----
+------------------------------------------------------------------------------
 
 You can easily use the test/dummy app as a demo of spree_variant_options. Just `cd` to where you develop and run:
 
-    git clone git://github.com/citrus/spree_variant_options.git
-    cd spree_variant_options
-    mv lib/dummy_hooks/after_migrate.rb.sample lib/dummy_hooks/after_migrate.rb
-    bundle install
-    bundle exec dummier
-    cd test/dummy
-    rails s
-    
+```bash
+git clone git://github.com/citrus/spree_variant_options.git
+cd spree_variant_options
+cp lib/dummy_hooks/after_migrate.rb.sample lib/dummy_hooks/after_migrate.rb
+bundle install
+bundle exec dummier
+cd test/dummy
+rails s
+```
 
+    
+------------------------------------------------------------------------------
 Contributors
-------------
+------------------------------------------------------------------------------
 
 * Spencer Steffen ([@citrus](https://github.com/citrus))
+* Dan Morin ([@danmorin](https://github.com/danmorin))
 * Richard Brown ([@rbrown](https://github.com/rbrown))
 * [@baracek](https://github.com/baracek)
 
 If you'd like to help out feel free to fork and send me pull requests!
 
 
+------------------------------------------------------------------------------
 License
--------
+------------------------------------------------------------------------------
 
-Copyright (c) 2011 Spencer Steffen and Citrus, released under the New BSD License All rights reserved.
+Copyright (c) 2011 - 2012 Spencer Steffen and Citrus, released under the New BSD License All rights reserved.
