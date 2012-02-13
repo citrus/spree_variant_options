@@ -6,7 +6,7 @@ require "rails/test_help"
 require "shoulda"
 require "factory_girl"
 require "sqlite3"
-require "faker"
+#require "faker"
 begin; require "turn"; rescue LoadError; end
-  
+
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

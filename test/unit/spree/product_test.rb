@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProductTest < ActiveSupport::TestCase
+class Spree::ProductTest < ActiveSupport::TestCase
 
   setup do
     @methods = %w(option_values grouped_option_values variant_options_hash)

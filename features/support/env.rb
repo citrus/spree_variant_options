@@ -12,8 +12,8 @@ ActionController::Base.allow_rescue = false
 Capybara.default_driver   = :selenium
 Capybara.default_selector = :css
 
-Cucumber::Rails::World.use_transactional_fixtures
-DatabaseCleaner.strategy  = :transaction
+Cucumber::Rails::World.use_transactional_fixtures = false
+DatabaseCleaner.strategy  = :truncation
   
 Dir["#{File.expand_path("../../../", __FILE__)}/test/support/**/*.rb"].each { |f| require f }
 
@@ -21,6 +21,6 @@ World(HelperMethods)
 
 # ensures spree preferencs are initialized before each test
 Before do
-  Spree::Config.instance_variable_set("@configuration", nil)
-  Spree::Config.set(:random => rand(1000))
+  #Spree::Config.instance_variable_set("@configuration", nil)
+  #Spree::Config.set(:allow_backorders => true)
 end

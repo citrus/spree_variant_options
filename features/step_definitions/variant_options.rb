@@ -3,7 +3,7 @@
 
 def variant_by_descriptor(descriptor)
   values = descriptor.split(" ")
-  values.map! { |word| OptionValue.find_by_presentation(word) rescue nil }.compact!
+  values.map! { |word| Spree::OptionValue.find_by_presentation(word) rescue nil }.compact!
   return if values.blank?
   @product.variants.includes(:option_values).select{|i| i.option_value_ids.sort == values.map(&:id) }.first
 end
@@ -64,7 +64,7 @@ Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
   return @variant if @variant
   @product.option_type_ids.each_with_index do |otid, index|
     word = values[index]
-    val = OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase) 
+    val = Spree::OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase) 
     values[index] = val
   end
   @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
@@ -99,10 +99,10 @@ Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type
     when "second"; @product.option_types[1];
     when "last";   @product.option_types.last;
   end
-  assert_seen option_type.presentation, :within => "#option_type_#{option_type.id} h3.variant-option-type"
+  assert_seen option_type.presentation, :within => "#spree_option_type_#{option_type.id} h6.variant-option-type"
   option_type.option_values.each do |value|
     rel = "#{option_type.id}-#{value.id}"
-    link = find("#option_type_#{option_type.id} a[rel='#{option_type.id}-#{value.id}']")
+    link = find("#spree_option_type_#{option_type.id} a[rel='#{option_type.id}-#{value.id}']")
     assert_not_nil link
     assert_equal value.presentation, link.text
     assert_equal "#", link.native.attribute('href').last

@@ -1,18 +1,47 @@
 require 'uri'
 require 'cgi'
-require File.expand_path("../../support/paths.rb", __FILE__)
-require File.expand_path("../../support/selectors.rb", __FILE__)
 
 def get_parent(parent)
   case parent.sub(/^the\s/, '')
     when "flash notice";  ".flash"
-    when "first set of options";  "#option_type_#{@product.option_types.first.id}"
-    when "second set of options"; "#option_type_#{@product.option_types[1].id}"
+    when "first set of options";  "#spree_option_type_#{@product.option_types.first.id}"
+    when "second set of options"; "#spree_option_type_#{@product.option_types[1].id}"
     when "variant images label";  "#product-thumbnails"
-    when "price"; "#product-price .price"    
+    when "price"; "#product-price .price"   
     else "[set-your-parent] #{parent}"
   end
 end
+
+
+# WTF OMG HAX! 
+# Why aren't these url helpers present from the spree core?
+# I've tried to include them in the env like so:
+#
+#  World(Spree::Core::Engine.routes.url_helpers)
+#
+# and like so:
+#
+#  World(Rails.application.routes.url_helpers)
+#
+# WTF?!?!?
+
+def id_or_param(id)
+  id = id.to_param if id.respond_to?(:to_param)
+  id
+end
+
+def cart_path
+  "/cart"
+end
+
+def product_path(id)
+  "/products/#{id_or_param(id)}"
+end
+
+def edit_admin_option_type_path(id)
+  "/admin/option_types/#{id_or_param(id)}/edit"
+end
+
 
 
 #========================================================================
@@ -30,9 +59,9 @@ end
 Given /^I'm on the ((?!page).*) page for (.*)$/ do |path, id|
   id = case id
     when "the first product"
-      @product ||= Product.last
+      @product ||= Spree::Product.last
     when 'option type "Size"'
-      @option_type = OptionType.find_by_presentation!("Size")
+      @option_type = Spree::OptionType.find_by_presentation("Size")
     else id
   end
   path = "#{path.downcase.gsub(/\s/, '_')}_path".to_sym
@@ -136,6 +165,3 @@ end
 When /^(?:|I )select "([^"]*)" from "([^"]*)"$/ do |value, field|
   select(value, :from => field)
 end
-
-
-

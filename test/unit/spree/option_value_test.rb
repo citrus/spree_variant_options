@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class OptionValueTest < ActiveSupport::TestCase
+class Spree::OptionValueTest < ActiveSupport::TestCase
 
   setup do
-    @images = Dir[File.expand_path("../../support/images/*", __FILE__)]
+    @images = Dir[File.expand_path("../../../support/images/*", __FILE__)]
   end
 
   should_have_attached_file :image
@@ -11,7 +11,7 @@ class OptionValueTest < ActiveSupport::TestCase
   context "a new option value" do
   
     setup do
-      @option_value = OptionValue.new
+      @option_value = Spree::OptionValue.new
     end
   
     should "not have an image" do
@@ -44,7 +44,7 @@ class OptionValueTest < ActiveSupport::TestCase
       end
       
       should "have small large and original images" do
-        dir = File.expand_path("../../dummy/public/system/images/#{@option_value.id}", __FILE__)
+        dir = File.expand_path("../../../dummy/public/system/images/#{@option_value.id}", __FILE__)
         %w(small large original).each do |size|
           assert File.exists?(File.join(dir, size, File.basename(@path)))
         end        
