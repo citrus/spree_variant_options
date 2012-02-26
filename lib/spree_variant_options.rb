@@ -1,15 +1,6 @@
 require 'spree_core'
 require 'spree_sample' unless Rails.env == 'production'
 
-# This class is defined in spree_auth.. we'll define
-unless defined? Spree::User::DestroyWithOrdersError
-  module Spree
-    class User < ActiveRecord::Base
-      class DestroyWithOrdersError < StandardError; end
-    end
-  end
-end
-
 module SpreeVariantOptions
 
   class Engine < Rails::Engine
@@ -27,7 +18,7 @@ module SpreeVariantOptions
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
     end
-    
+
   end
-  
+
 end
