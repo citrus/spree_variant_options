@@ -5,14 +5,14 @@ Spree Variant Options is a very simple spree extension that replaces the radio-b
 
 
 #### When no selection has been made:
-![Spree Variant Options - No selection](http://spree-docs.s3.amazonaws.com/spree_variant_options/1.jpg)
+![Spree Variant Options - No selection](http://spree-docs.s3.amazonaws.com/spree_variant_options/v0.3.1/1.jpg)
 
-#### After "Medium" is selected, "Medium Blue" is out of stock:
+#### After "Large" is selected, "Large Blue" is out of stock:
 
-![Spree Variant Options - Option Type/Value selected](http://spree-docs.s3.amazonaws.com/spree_variant_options/2.jpg)
+![Spree Variant Options - Option Type/Value selected](http://spree-docs.s3.amazonaws.com/spree_variant_options/v0.3.1/2.jpg)
 
 #### And after "Green" is selected:
-![Spree Variant Options - Variant Selcted](http://spree-docs.s3.amazonaws.com/spree_variant_options/3.jpg)
+![Spree Variant Options - Variant Selcted](http://spree-docs.s3.amazonaws.com/spree_variant_options/v0.3.1/3.jpg)
 
 To see it in action, follow the steps for "Demo" below.
 
@@ -26,7 +26,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 To install Spree Variant Options, just add the following to your Gemfile:
 
 ```ruby
-gem 'spree_variant_options', '0.3.0'
+gem 'spree_variant_options', '0.3.1'
 ```
 
 Now, bundle up with:
@@ -63,13 +63,13 @@ bundle install
 bundle exec dummier
 
 # cucumber/capybara
-rake cucumber
+bundle exec rake cucumber
 
 # test/unit
-rake test
+bundle exec rake test
 
 # both
-rake 
+bundle exec rake 
 ```
 
 POW!
@@ -84,7 +84,7 @@ You can easily use the test/dummy app as a demo of spree_variant_options. Just `
 ```bash
 git clone git://github.com/citrus/spree_variant_options.git
 cd spree_variant_options
-cp lib/dummy_hooks/after_migrate.rb.sample lib/dummy_hooks/after_migrate.rb
+cp test/dummy_hooks/after_migrate.rb.sample test/dummy_hooks/after_migrate.rb
 bundle install
 bundle exec dummier
 cd test/dummy
