@@ -4,8 +4,6 @@ ENV["RAILS_ROOT"] = File.expand_path("../../../test/dummy", __FILE__)
 require "cucumber/rails"
 require "selenium/webdriver"
 require "factory_girl"
-
-#  I18n.reload!
   
 ActionController::Base.allow_rescue = false
 
@@ -19,8 +17,8 @@ Dir["#{File.expand_path("../../../", __FILE__)}/test/support/**/*.rb"].each { |f
 
 World(HelperMethods)
 
-# ensures spree preferencs are initialized before each test
+# ensures spree preferencs are reset before each test
 Before do
-  #Spree::Config.instance_variable_set("@configuration", nil)
-  #Spree::Config.set(:allow_backorders => true)
+  Spree::Config.instance_variable_set("@configuration", nil)
+  Spree::Config.set(:allow_backorders => true)
 end

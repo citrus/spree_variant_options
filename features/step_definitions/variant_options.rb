@@ -21,8 +21,9 @@ end
 # Givens
 
 Given /^I( don't)? allow backorders$/ do |dont|
+  Spree::Config.instance_variable_set("@configuration", nil)
   Spree::Config.set(:allow_backorders => dont.nil?)
-  assert_equal dont.nil?, Spree::Config[:allow_backorders]
+  assert_equal dont.nil?, !!Spree::Config[:allow_backorders]
 end
 
 Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_images|
