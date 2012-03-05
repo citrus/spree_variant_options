@@ -38,6 +38,10 @@ class Spree::ProductTest < ActiveSupport::TestCase
       assert !@product.option_values.include?(unused)
     end
     
+    should "retain option values sort order" do
+      assert_equal [1,2], @product.option_values.map(&:position).uniq
+    end
+    
     should "have values grouped by type" do
       expected = { "size" => 4, "color" => 8 }
       assert_equal 2,  @product.grouped_option_values.count

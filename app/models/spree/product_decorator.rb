@@ -3,14 +3,14 @@ Spree::Product.class_eval do
   include ActionView::Helpers::NumberHelper
 
   def option_values
-    variants.map(&:option_values).flatten.uniq
+    variants.map(&:option_values).flatten.uniq.sort_by(&:position)
   end
   
   def grouped_option_values
     option_values.group_by(&:option_type)
   end
   
-  def variant_options_hash  
+  def variant_options_hash
     return @variant_options_hash if @variant_options_hash
     @variant_options_hash = Hash[grouped_option_values.map{ |type, values| 
       [type.id.inspect, Hash[values.map{ |value|         
