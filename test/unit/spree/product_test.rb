@@ -17,7 +17,7 @@ class Spree::ProductTest < ActiveSupport::TestCase
         assert @product.respond_to?(m)
       end
     end
-  
+        
   end
   
   
@@ -31,6 +31,11 @@ class Spree::ProductTest < ActiveSupport::TestCase
       assert_equal 2,  @product.option_types.count
       assert_equal 12, @product.option_values.count
       assert_equal 32, @product.variants.count
+    end
+    
+    should "fetch all unique option values" do
+      unused = Factory(:option_value, :option_type => @product.option_types.first, :presentation => "Unused")
+      assert !@product.option_values.include?(unused)
     end
     
     should "have values grouped by type" do
