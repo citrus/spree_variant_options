@@ -97,6 +97,7 @@ Contributors
 ------------------------------------------------------------------------------
 
 * Spencer Steffen ([@citrus](https://github.com/citrus))
+* Stéphane Bounmy ([@sbounmy](https://github.com/sbounmy))
 * Dan Morin ([@danmorin](https://github.com/danmorin))
 * Richard Brown ([@rbrown](https://github.com/rbrown))
 * [@baracek](https://github.com/baracek)
