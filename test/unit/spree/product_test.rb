@@ -39,6 +39,8 @@ class Spree::ProductTest < ActiveSupport::TestCase
     end
     
     should "retain option values sort order" do
+      @product.option_types.each_with_index {|ot, i| ot.update_attribute(:position, i + 1) }
+      assert_equal [1,2], @product.option_values.map {|ov| ov.option_type.reload.position }.uniq
       assert_equal [1,2], @product.option_values.map(&:position).uniq
     end
     
