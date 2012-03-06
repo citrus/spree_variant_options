@@ -47,7 +47,7 @@ Then /^I should see image "([^"]*)" within the first option value$/ do |source|
   ot = @product.option_types.first
   ov = ot.option_values.first
   within ".variant-options a[rel='#{ot.id}-#{ov.id}']" do
-    assert_match "/system/images/#{ov.id}/small/#{source}", find("img").native.attribute("src")
+    assert_match "/spree/option_values/#{ov.id}/small/#{source}", find("img").native.attribute("src")
   end
 end
 

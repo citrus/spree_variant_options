@@ -44,7 +44,7 @@ class Spree::OptionValueTest < ActiveSupport::TestCase
       end
       
       should "have small large and original images" do
-        dir = File.expand_path("../../../dummy/public/system/images/#{@option_value.id}", __FILE__)
+        dir = File.expand_path("../../../dummy/public/spree/option_values/#{@option_value.id}", __FILE__)
         %w(small large original).each do |size|
           assert File.exists?(File.join(dir, size, File.basename(@path)))
         end        
