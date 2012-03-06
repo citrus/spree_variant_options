@@ -74,5 +74,9 @@ class Spree::OptionValueTest < ActiveSupport::TestCase
       assert !@unordered
     end
 
+    should "return empty array when no variants" do
+      product = Factory(:product)
+      assert_equal [], Spree::OptionValue.for_product(product)
+    end
   end
 end
