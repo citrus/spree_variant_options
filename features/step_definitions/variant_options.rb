@@ -34,7 +34,7 @@ Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_
       @product.variants.each do |v|
         v.images.create(:attachment => random_image, :alt => v.sku)
       end
-    end   
+    end
   end
 end
 
@@ -57,18 +57,26 @@ Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   @variant.update_attributes(:count_on_hand => 0)
 end
 
+Given /^all the variants are out of stock$/ do
+  @product.variants.update_all(:count_on_hand => 0)
+end
+
 Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
   price = price ? price.gsub(/[^\d\.]/, '').to_f : 10.00
-  values = descriptor.split(" ")
-  flunk unless @product && values.length == @product.option_types.length
-  @variant = variant_by_descriptor(descriptor)
-  return @variant if @variant
-  @product.option_type_ids.each_with_index do |otid, index|
-    word = values[index]
-    val = Spree::OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase) 
-    values[index] = val
+  if descriptor == "master"
+    @product.master.update_attributes(:price => price)
+  else
+    values = descriptor.split(" ")
+    flunk unless @product && values.length == @product.option_types.length
+    @variant = variant_by_descriptor(descriptor)
+    return @variant if @variant
+    @product.option_type_ids.each_with_index do |otid, index|
+      word = values[index]
+      val = Spree::OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase)
+      values[index] = val
+    end
+    @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
   end
-  @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
   @product.reload
 end
 
@@ -109,7 +117,7 @@ Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type
     assert_equal "#", link.native.attribute('href').last
     assert_equal "option-value #{enabled ? 'in-stock' : 'locked'}", link.native.attribute('class')
     assert_equal rel, link.native.attribute('rel') # obviously!
-  end  
+  end
 end
 
 Then /^I should have a hidden input for the selected variant$/ do
