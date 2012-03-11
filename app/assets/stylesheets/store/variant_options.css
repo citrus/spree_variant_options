@@ -65,6 +65,7 @@ li.clear-option a.clear-button:hover {
   border-color: #f0f0f0;
   color: #ddd;
   cursor: default;
+  display: none;
 }
 .option-value.locked img {
   filter:alpha(opacity=50);

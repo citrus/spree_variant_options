@@ -181,7 +181,7 @@ function VariantOptions(options, allow_backorders) {
     enable(buttons.removeClass('selected'));
     toggle();
     parent.nextAll().each(function(index, element) {
-      disable($(element).find('a.option-value').show().removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
+      disable($(element).find('a.option-value').removeClass('in-stock out-of-stock').addClass('locked').unbind('click'));
       $(element).find('a.clear-button').hide();
     });
   }
