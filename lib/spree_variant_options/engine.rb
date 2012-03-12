@@ -2,7 +2,7 @@ module SpreeVariantOptions
   class Engine < Rails::Engine
 
     engine_name "spree_variant_options"
-
+        
     config.to_prepare do
       #loads application's model / class decorators
       Dir.glob File.expand_path("../../../app/**/*_decorator.rb", __FILE__) do |c|
