@@ -36,6 +36,7 @@ function VariantOptions(options, allow_backorders) {
   var allow_backorders = allow_backorders;
   var variant, divs, parent, index = 0;
   var selection = [];
+  var buttons; 
 
   function init() {
     divs = $('#product-variants .variant-options');
