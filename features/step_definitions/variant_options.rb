@@ -98,7 +98,7 @@ Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type
     when "second"; @product.option_types[1];
     when "last";   @product.option_types.last;
   end
-  assert_seen option_type.presentation, :within => "#option_type_#{option_type.id} h3.variant-option-type"
+  assert_seen option_type.presentation, :within => "#option_type_#{option_type.id} .variant-option-type"
   option_type.option_values.each do |value|
     rel = "#{option_type.id}-#{value.id}"
     link = find("#option_type_#{option_type.id} a[rel='#{option_type.id}-#{value.id}']")

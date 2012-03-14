@@ -3,7 +3,7 @@ require_relative '../test_helper'
 class ProductTest < ActiveSupport::TestCase
 
   setup do
-    @methods = %w(option_values grouped_option_values variant_options_hash)
+    @methods = %w(option_values grouped_option_values variant_options_hash variants_for_option_value)
   end
   
   context "any product" do

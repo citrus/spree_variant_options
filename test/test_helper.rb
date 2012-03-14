@@ -10,7 +10,7 @@ Spork.prefork do
   require "factory_girl"
   require "sqlite3"
   require "faker"
-  require "turn"
+  #require "turn"
   
   # Run any available migration if needed
   ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
