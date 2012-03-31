@@ -15,11 +15,14 @@ module SpreeVariantOptions
       end
     end
 
-    initializer "spree_variant_options.environment", :before => :load_config_initializers, :after => "spree.environment" do
+    initializer "spree_variant_options.environment", :before => :load_config_initializers, :after => "spree.environment" do |app|
       Dir.glob(File.join(File.dirname(__FILE__), "../../app/models/spree/app_configuration/*.rb")) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
-      SpreeVariantOptions::VariantConfig = SpreeVariantOptions::VariantConfiguration.new
+      app.config.spree.add_class('variant_preferences')
+      app.config.spree.variant_preferences = SpreeVariantOptions::VariantConfiguration.new
+
+      SpreeVariantOptions::VariantConfig = app.config.spree.variant_preferences
     end
   end
 end

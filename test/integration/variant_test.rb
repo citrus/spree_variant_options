@@ -3,6 +3,7 @@ require 'test_helper'
 class ProductTest < ActionDispatch::IntegrationTest
 
   setup do
+    Spree::Config[:allow_backorders] = false
     @product = Factory(:product)
     @size = Factory(:option_type)
     @color = Factory(:option_type, :name => "Color")
@@ -34,13 +35,12 @@ class ProductTest < ActionDispatch::IntegrationTest
 
   test 'disallow choose out of stock variants' do
     SpreeVariantOptions::VariantConfig.allow_select_outofstock = false
-    pending "SpreeVariantOptions::VariantConfig[:allow_select_outofstock] is still true in selenium..."
 
     visit spree.product_path(@product)
     within("#product-variants") do
       size = find_link('M')
       size.click
-      assert !size["class"].include?("selected")
+      assert size["class"].include?("selected")
       color = find_link('Red')
       color.click
       assert !color["class"].include?("selected")
