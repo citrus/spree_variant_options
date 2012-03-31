@@ -17,9 +17,7 @@ class ProductTest < ActionDispatch::IntegrationTest
   end
 
   test 'allow choose out of stock variants' do
-    reset_spree_preferences do |config|
-      config.allow_select_outofstock = true
-    end
+    SpreeVariantOptions::VariantConfig.allow_select_outofstock = true
 
     visit spree.product_path(@product)
     within("#product-variants") do
@@ -35,11 +33,8 @@ class ProductTest < ActionDispatch::IntegrationTest
   end
 
   test 'disallow choose out of stock variants' do
-    reset_spree_preferences do |config|
-      config.allow_select_outofstock = false #default
-    end
-
-    pending "Spree::Config[:allow_select_outofstock] is still true in selenium..."
+    SpreeVariantOptions::VariantConfig.allow_select_outofstock = false
+    pending "SpreeVariantOptions::VariantConfig[:allow_select_outofstock] is still true in selenium..."
 
     visit spree.product_path(@product)
     within("#product-variants") do

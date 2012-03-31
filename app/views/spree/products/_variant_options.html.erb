@@ -20,10 +20,10 @@
       <% index += 1 %>
     <% end %>
     <%= hidden_field_tag "products[#{@product.id}]", "", :id => "variant_id", :class => "hidden" %>
-    <%= debug Spree::Config[:allow_select_outofstock] %>
+    <%= debug SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>
     <script type="text/javascript">
     //<![CDATA[
-      var variant_options = new VariantOptions(<%== @product.variant_options_hash.to_json %>, <%==  !!Spree::Config[:allow_backorders] %>, <%== !!Spree::Config[:allow_select_outofstock] %>);
+      var variant_options = new VariantOptions(<%== @product.variant_options_hash.to_json %>, <%==  !!Spree::Config[:allow_backorders] %>, <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>);
     //]]>
     </script>
   </div>
