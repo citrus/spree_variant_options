@@ -18,10 +18,10 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
-  
+
   # Runtime
   s.add_dependency('spree_core', '~> 1.0')
-  
+
   # Development
   s.add_development_dependency('spree_sample',     '~> 1.0')
   s.add_development_dependency('dummier',          '~> 0.3')
@@ -30,5 +30,13 @@ Gem::Specification.new do |s|
   s.add_development_dependency('cucumber-rails',   '~> 1.2')
   s.add_development_dependency('database_cleaner', '~> 0.6')
   s.add_development_dependency('sqlite3',          '~> 1.3')
+  s.add_development_dependency('capybara')
+  s.add_development_dependency('launchy')
+  s.add_development_dependency('database_cleaner')
 
+  if RUBY_VERSION < "1.9"
+    s.add_development_dependency "ruby-debug"
+  else
+    s.add_development_dependency "ruby-debug19"
+  end
 end
