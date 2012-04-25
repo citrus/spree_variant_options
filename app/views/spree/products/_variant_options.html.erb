@@ -22,8 +22,8 @@
     <%= hidden_field_tag "products[#{@product.id}]", "", :id => "variant_id", :class => "hidden" %>
     <script type="text/javascript">
     //<![CDATA[
-      var variant_options = new VariantOptions(<%== @product.variant_options_hash.to_json %>, <%==  !!Spree::Config[:allow_backorders] %>);
+      var variant_options = new VariantOptions(<%== @product.variant_options_hash.to_json %>, <%==  !!Spree::Config[:allow_backorders] %>, <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>);
     //]]>
-    </script>    
+    </script>
   </div>
 <% end%>

@@ -30,13 +30,14 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   return m;
 }
 
-function VariantOptions(options, allow_backorders) {
+function VariantOptions(options, allow_backorders, allow_select_outofstock) {
 
   var options = options;
   var allow_backorders = allow_backorders;
+  var allow_select_outofstock = allow_select_outofstock;
   var variant, divs, parent, index = 0;
   var selection = [];
-  var buttons; 
+  var buttons;
 
   function init() {
     divs = $('#product-variants .variant-options');
@@ -63,14 +64,17 @@ function VariantOptions(options, allow_backorders) {
   }
 
   function enable(btns) {
-    return btns.not('.unavailable').removeClass('locked').unbind('click').filter('.in-stock').click(handle_click).filter('.auto-click').removeClass('auto-click').click();
+    bt = btns.not('.unavailable').removeClass('locked').unbind('click')
+    if (!allow_select_outofstock)
+      bt = bt.filter('.in-stock')
+    return bt.click(handle_click).filter('.auto-click').removeClass('auto-click').click();
   }
 
   function advance() {
     index++
     update();
     inventory(buttons.removeClass('locked'));
-    enable(buttons.filter('.in-stock'));
+    enable(buttons);
   }
 
   function inventory(btns) {
@@ -161,17 +165,19 @@ function VariantOptions(options, allow_backorders) {
 
   function toggle() {
     if (variant) {
-      $('#variant_id').val(variant.id);
+      $('#variant_id, form[data-form-type="variant"] input[name$="[variant_id]"]').val(variant.id);
       $('#product-price .price').removeClass('unselected').text(variant.price);
-      $('#cart-form button[type=submit]').attr('disabled', false).fadeTo(100, 1);
+      if (variant.count > 0)
+        $('#cart-form button[type=submit]').attr('disabled', false).fadeTo(100, 1);
+      $('form[data-form-type="variant"] button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       try {
         show_variant_images(variant.id);
       } catch(error) {
         // depends on modified version of product.js
       }
     } else {
-      $('#variant_id').val('');
-      $('#cart-form button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
+      $('#variant_id, form[data-form-type="variant"] input[name$="[variant_id]"]').val('');
+      $('#cart-form button[type=submit], form[data-form-type="variant"] button[type=submit]').attr('disabled', true).fadeTo(0, 0.5);
       price = $('#product-price .price').addClass('unselected')
       // Replace product price by "(select)" only when there are at least 1 variant not out-of-stock
       variants = $("div.variant-options.index-0")
