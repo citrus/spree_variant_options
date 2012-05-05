@@ -125,8 +125,6 @@ class ProductTest < ActionDispatch::IntegrationTest
 
         should "choose variant with track_inventory_levels to false" do
 
-          pending "selenium run timeout.. dont know why"
-          return
           visit spree.product_path(@product)
           within("#product-variants") do
             size = find_link('S')
@@ -136,7 +134,7 @@ class ProductTest < ActionDispatch::IntegrationTest
             color.click
             assert color["class"].include?("selected")
           end
-          save_and_open_page
+
           # add to cart button is enabled
           assert_equal "false", find_button("Add To Cart")["disabled"]
           # add to wishlist button is enabled

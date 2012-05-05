@@ -67,7 +67,7 @@ function VariantOptions(params) {
 
   function enable(btns) {
     bt = btns.not('.unavailable').removeClass('locked').unbind('click')
-    if (!allow_select_outofstock)
+    if (!allow_select_outofstock && !allow_backorders)
       bt = bt.filter('.in-stock')
     return bt.click(handle_click).filter('.auto-click').removeClass('auto-click').click();
   }
