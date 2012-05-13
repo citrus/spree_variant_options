@@ -50,7 +50,7 @@ Spree Variant Options comes with some handy options:
 
 - allow_select_outofstock (default : false)
   When using extension like ([spree_wishlist](https://github.com/spree/spree_wishlist)), you might want to allow your customer to add out of stock product by selecting out of stock variant options :
-  ```html
+  ```erb
     <%= form_for Spree::WishedProduct.new, :html => {:"data-form-type" => "variant"} do |f| %>
       <%= f.hidden_field :variant_id, :value => @product.master.id %>
       <button type="submit" class="medium blue awesome">
