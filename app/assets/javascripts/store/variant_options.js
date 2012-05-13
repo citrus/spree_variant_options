@@ -30,14 +30,16 @@ if (!Array.find_matches) Array.find_matches = function(a) {
   return m;
 }
 
-function VariantOptions(options, allow_backorders, allow_select_outofstock) {
+function VariantOptions(params) {
 
-  var options = options;
-  var allow_backorders = allow_backorders;
-  var allow_select_outofstock = allow_select_outofstock;
+  var options = params['options'];
+  var allow_backorders = !params['track_inventory_levels'] ||  params['allow_backorders'];
+  var allow_select_outofstock = params['allow_select_outofstock'];
+
   var variant, divs, parent, index = 0;
   var selection = [];
   var buttons;
+
 
   function init() {
     divs = $('#product-variants .variant-options');
@@ -65,7 +67,7 @@ function VariantOptions(options, allow_backorders, allow_select_outofstock) {
 
   function enable(btns) {
     bt = btns.not('.unavailable').removeClass('locked').unbind('click')
-    if (!allow_select_outofstock)
+    if (!allow_select_outofstock && !allow_backorders)
       bt = bt.filter('.in-stock')
     return bt.click(handle_click).filter('.auto-click').removeClass('auto-click').click();
   }
@@ -167,7 +169,7 @@ function VariantOptions(options, allow_backorders, allow_select_outofstock) {
     if (variant) {
       $('#variant_id, form[data-form-type="variant"] input[name$="[variant_id]"]').val(variant.id);
       $('#product-price .price').removeClass('unselected').text(variant.price);
-      if (variant.count > 0)
+      if (variant.count > 0 || allow_backorders)
         $('#cart-form button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       $('form[data-form-type="variant"] button[type=submit]').attr('disabled', false).fadeTo(100, 1);
       try {
