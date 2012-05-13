@@ -36,13 +36,12 @@ class ProductTest < ActionDispatch::IntegrationTest
       :name => "add_other_form_to_spree_variant_options",
       :insert_after => "div#cart-form",
       :text => '<div id="wishlist-form"><%= form_for Spree::WishedProduct.new, :url => "foo", :html => {:"data-form-type" => "variant"} do |f| %><%= f.hidden_field :variant_id, :value => @product.master.id %><button type="submit"><%= t(:add_to_wishlist) %></button><% end %></div>')
+      SpreeVariantOptions::VariantConfig.default_instock = false
     end
 
     should 'disallow choose out of stock variants' do
 
       SpreeVariantOptions::VariantConfig.allow_select_outofstock = false
-      SpreeVariantOptions::VariantConfig.default_instock = false
-
 
       visit spree.product_path(@product)
 
@@ -137,8 +136,6 @@ class ProductTest < ActionDispatch::IntegrationTest
 
     should "choose variant with track_inventory_levels to false" do
 
-      pending "selenium run timeout.. dont know why"
-      return
       visit spree.product_path(@product)
       within("#product-variants") do
         size = find_link('S')
@@ -148,7 +145,6 @@ class ProductTest < ActionDispatch::IntegrationTest
         color.click
         assert color["class"].include?("selected")
       end
-      save_and_open_page
       # add to cart button is enabled
       assert_equal "false", find_button("Add To Cart")["disabled"]
       # add to wishlist button is enabled

@@ -42,6 +42,32 @@ rails g spree_variant_options:install
 rake db:migrate
 ```
 
+------------------------------------------------------------------------------
+Configuration Options
+------------------------------------------------------------------------------
+
+Spree Variant Options comes with some handy options:
+
+- allow_select_outofstock (default : false)
+  When using extension like ([spree_wishlist](https://github.com/spree/spree_wishlist)), you might want to allow your customer to add out of stock product by selecting out of stock variant options :
+  ```html
+    <%= form_for Spree::WishedProduct.new, :html => {:"data-form-type" => "variant"} do |f| %>
+      <%= f.hidden_field :variant_id, :value => @product.master.id %>
+      <button type="submit" class="medium blue awesome">
+        <%= t(:add_to_wishlist) %>
+      </button>
+    <% end %>
+  ```
+  By setting allow_select_outofstock to true, when an user selects variant options it will automatically update any form's input variant_id with an data-form-type="variant" attribute.
+
+- default_instock (default: false)
+  If this is option is set to true, it will automatically preselect in-stock variant options.
+
+These configuration options can be set in a config/initializers/spree_variant_options.rb file for example :
+```ruby
+SpreeVariantOptions::VariantConfig.allow_select_outofstock = true
+SpreeVariantOptions::VariantConfig.default_instock = true
+```
 
 ------------------------------------------------------------------------------
 Versions

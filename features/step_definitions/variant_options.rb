@@ -22,6 +22,7 @@ end
 
 Given /^I( don't)? allow backorders$/ do |dont|
   Spree::Config.instance_variable_set("@configuration", nil)
+  Spree::Config.set(:track_inventory_levels => true)
   Spree::Config.set(:allow_backorders => dont.nil?)
   assert_equal dont.nil?, !!Spree::Config[:allow_backorders]
 end
@@ -97,8 +98,15 @@ end
 #===============================
 # Thens
 
+Then /show me the page/ do
+  save_and_open_page
+end
+
 Then /^the source should contain the options hash$/ do
-  assert source.include?("VariantOptions(#{@product.variant_options_hash.to_json}, #{Spree::Config[:allow_backorders]})")
+  assert source.include?("options: #{@product.variant_options_hash.to_json}")
+  assert source.include?("track_inventory_levels: #{!!Spree::Config[:track_inventory_levels]}")
+  assert source.include?("allow_backorders: #{!!Spree::Config[:allow_backorders]}")
+  assert source.include?("allow_select_outofstock: #{!!SpreeVariantOptions::VariantConfig[:allow_select_outofstock]}")
 end
 
 Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type$/ do |state, option_type|
