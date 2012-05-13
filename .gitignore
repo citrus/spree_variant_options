@@ -7,3 +7,4 @@ public/tmp.html
 test/dummy_hooks/after_migrate.rb
 test/dummy
 capybara-*.html
+.rvmrc
