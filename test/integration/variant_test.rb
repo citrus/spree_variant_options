@@ -116,6 +116,11 @@ class ProductTest < ActionDispatch::IntegrationTest
       end
     end
 
+    def teardown
+      # reset preferences to default values
+      SpreeVariantOptions::VariantConfig.allow_select_outofstock = false
+      SpreeVariantOptions::VariantConfig.default_instock = false
+    end
   end
 
   context 'without inventory tracking' do
