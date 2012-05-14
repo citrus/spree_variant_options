@@ -6,11 +6,7 @@ require "rails/test_help"
 require "shoulda"
 require "factory_girl"
 require "sqlite3"
-if RUBY_VERSION < "1.9"
-  require "ruby-debug"
-else
-  require "ruby-debug19"
-end
+
 begin; require "turn"; rescue LoadError; end
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
