@@ -126,23 +126,25 @@ class ProductTest < ActionDispatch::IntegrationTest
   context 'without inventory tracking' do
 
     setup do
-      reset_spree_preferences
-      Spree::Config[:track_inventory_levels] = false
-      Spree::Config[:allow_backorders] = false
+      reset_spree_preferences do |config|
+        config.track_inventory_levels = false
+        config.allow_backorders = false
+      end
       @product = Factory(:product)
       @size = Factory(:option_type)
       @color = Factory(:option_type, :name => "Color")
       @s = Factory(:option_value, :presentation => "S", :option_type => @size)
       @red = Factory(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
       @green = Factory(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
-      @variant1 = @product.variants.create(:option_values => [@s, @red], :price => 10, :cost_price => 5)
-      @variant2 = @product.variants.create(:option_values => [@s, @green], :price => 10, :cost_price => 5)
+      @variant1 = @product.variants.create({:option_values => [@s, @red], :price => 10, :cost_price => 5}, :without_protection => true)
+      @variant2 = @product.variants.create({:option_values => [@s, @green], :price => 10, :cost_price => 5}, :without_protection => true)
     end
 
     should "choose variant with track_inventory_levels to false" do
 
       visit spree.product_path(@product)
       within("#product-variants") do
+        # debugger
         size = find_link('S')
         size.click
         assert size["class"].include?("selected")
