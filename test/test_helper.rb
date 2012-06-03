@@ -6,6 +6,7 @@ require "rails/test_help"
 require "shoulda"
 require "factory_girl"
 require "sqlite3"
+require 'debugger'
 
 begin; require "turn"; rescue LoadError; end
 

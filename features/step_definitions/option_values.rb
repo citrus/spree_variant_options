@@ -9,7 +9,7 @@ end
 
 Then /^I fill in the option value fields for (.*)$/ do |parent|
   if parent == 'the new option value'
-    parent = "tr#new_spree_option_value"
+    parent = "tr#spree_option_value"
   else
     matches = parent.match(/([^"]*)"$/)
     ov = Spree::OptionValue.find_by_presentation(matches[matches.length - 1])
@@ -42,12 +42,12 @@ end
 
 #When /^I drag option value "([^"]*)" to the top$/ do |value_string|
 #  ov = OptionValue.find_by_presentation(value_string)
-#  page.driver.browser.drag_and_drop("#spree_option_value_#{ov.id} span.handle", "0,-100")
+#  page.driver.browser.drag_and_drop("#option_value_#{ov.id} span.handle", "0,-100")
 #end
 
 #When /^I drag option value "([^"]*)" to the top$/ do |value_string|
 #  ov = OptionValue.find_by_presentation(value_string)
-#  from = find("#spree_option_value_#{ov.id} span.handle")
+#  from = find("#option_value_#{ov.id} span.handle")
 #  to   = find("table.index tr:first")
 #  from.drag_to(to) 
 #end
@@ -59,6 +59,6 @@ end
 #Then /^I should see "([^"]*)" as the first option value$/ do |value_string|
 #  ov = OptionValue.find_by_presentation(value_string)
 #  #assert_equal 1, ov.position
-#  #assert_equal find("table.index tr:first"), find("#spree_option_value_#{ov.id}")
+#  #assert_equal find("table.index tr:first"), find("#option_value_#{ov.id}")
 #end
 

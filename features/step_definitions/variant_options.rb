@@ -55,7 +55,7 @@ end
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
   @variant = variant_by_descriptor(descriptor)
-  @variant.update_attributes(:count_on_hand => 0)
+  @variant.update_attribute(:count_on_hand, 0)
 end
 
 Given /^all the variants are out of stock$/ do
@@ -116,10 +116,10 @@ Then /^I should see (enabled|disabled)+ links for the ((?!option).*) option type
     when "second"; @product.option_types[1];
     when "last";   @product.option_types.last;
   end
-  assert_seen option_type.presentation, :within => "#spree_option_type_#{option_type.id} h6.variant-option-type"
+  assert_seen option_type.presentation, :within => "#option_type_#{option_type.id} h6.variant-option-type"
   option_type.option_values.each do |value|
     rel = "#{option_type.id}-#{value.id}"
-    link = find("#spree_option_type_#{option_type.id} a[rel='#{option_type.id}-#{value.id}']")
+    link = find("#option_type_#{option_type.id} a[rel='#{option_type.id}-#{value.id}']")
     assert_not_nil link
     assert_equal value.presentation, link.text
     assert_equal "#", link.native.attribute('href').last

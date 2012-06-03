@@ -8,11 +8,6 @@ module SpreeVariantOptions
       Dir.glob(File.join(File.dirname(__FILE__), "../../app/**/*_decorator*.rb")) do |c|
         Rails.application.config.cache_classes ? require(c) : load(c)
       end
-
-      #loads application's deface view overrides
-      Dir.glob File.expand_path("../../../app/overrides/*.rb", __FILE__) do |c|
-        Rails.application.config.cache_classes ? require(c) : load(c)
-      end
     end
 
     initializer "spree_variant_options.environment", :before => :load_config_initializers, :after => "spree.environment" do |app|

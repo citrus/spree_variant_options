@@ -4,8 +4,8 @@ require 'cgi'
 def get_parent(parent)
   case parent.sub(/^the\s/, '')
     when "flash notice";  ".flash"
-    when "first set of options";  "#spree_option_type_#{@product.option_types.first.id}"
-    when "second set of options"; "#spree_option_type_#{@product.option_types[1].id}"
+    when "first set of options";  "#option_type_#{@product.option_types.first.id}"
+    when "second set of options"; "#option_type_#{@product.option_types[1].id}"
     when "variant images label";  "#product-thumbnails"
     when "price"; "#product-price .price"   
     else "[set-your-parent] #{parent}"
