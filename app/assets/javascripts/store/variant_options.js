@@ -192,6 +192,9 @@ function VariantOptions(params) {
       variants = $("div.variant-options.index-0")
       if (variants.find("a.option-value.out-of-stock").length != variants.find("a.option-value").length)
         price.text(('unselected' in variant_options_i18n) ? variant_options_i18n.unselected : '(select)');
+      try {
+        show_variant_images(0);
+      } catch(error) { }
     }
   }
 
