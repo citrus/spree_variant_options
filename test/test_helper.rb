@@ -21,6 +21,8 @@ class ActionDispatch::IntegrationTest
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
   include Spree::UrlHelpers
+  # Initialize Spree::User
+  Spree.user_class = "Spree::User"
 
   # Stop ActiveRecord from wrapping tests in transactions
   self.use_transactional_fixtures = false
