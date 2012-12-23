@@ -71,6 +71,21 @@ SpreeVariantOptions::VariantConfig.allow_select_outofstock = true
 SpreeVariantOptions::VariantConfig.default_instock = true
 ```
 
+### Storage options
+Like in spree core there is support for storage of images on S3.
+Storage on S3 is enabled with the same configuration as in spree core.
+
+Example: config/initializers/spree.rb
+
+```ruby
+Spree.config do |config|
+  config.use_s3 = true
+  config.s3_bucket = <bucket_name>
+  config.s3_access_key = <aws_access_key>
+  config.s3_secret = <aws_secret_key>
+end
+```
+
 ------------------------------------------------------------------------------
 Versions
 ------------------------------------------------------------------------------
