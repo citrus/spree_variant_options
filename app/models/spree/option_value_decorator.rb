@@ -10,6 +10,9 @@ Spree::OptionValue.class_eval do
     :url           => "/spree/option_values/:id/:style/:basename.:extension",
     :path          => ":rails_root/public/spree/option_values/:id/:style/:basename.:extension"
 
+  include Spree::Core::S3Support
+  supports_s3 :image
+
   def has_image?
     image_file_name && !image_file_name.empty?
   end
