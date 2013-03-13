@@ -20,16 +20,17 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Runtime
-  s.add_dependency('spree_core', '~> 1.2.0')
+  s.add_dependency('spree_core', '~> 1.2')
 
   # Development
-  s.add_development_dependency('spree_sample',     '~> 1.2.0')
-  s.add_development_dependency('dummier',          '~> 0.3')
-  s.add_development_dependency('shoulda',          '~> 3.0')
-  s.add_development_dependency('factory_girl',     '~> 2.3')
-  s.add_development_dependency('cucumber-rails',   '~> 1.2')
-  s.add_development_dependency('database_cleaner', '~> 0.6')
-  s.add_development_dependency('sqlite3',          '~> 1.3')
+  s.add_development_dependency('spree_sample',      '>= 1.2.0')
+  s.add_development_dependency('spree_auth_devise', '>= 1.0.0')
+  s.add_development_dependency('dummier',           '~> 0.3')
+  s.add_development_dependency('shoulda',           '~> 3.0')
+  s.add_development_dependency('factory_girl',      '~> 2.3')
+  s.add_development_dependency('cucumber-rails',    '~> 1.2')
+  s.add_development_dependency('database_cleaner',  '~> 0.6')
+  s.add_development_dependency('sqlite3',           '~> 1.3')
   s.add_development_dependency('capybara')
   s.add_development_dependency('launchy')
   s.add_development_dependency('database_cleaner')
