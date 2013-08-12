@@ -56,9 +56,9 @@ class ProductTest < ActionDispatch::IntegrationTest
       end
 
       # add to cart button is still disabled
-      assert_equal "true", find_button("Add To Cart")["disabled"]
+      assert find_button("Add To Cart", :disabled => true).disabled?
       # add to wishlist button is still disabled
-      assert_equal "true", find_button("Add To Wishlist")["disabled"]
+      assert find_button("Add To Wishlist", :disabled => true).disabled?
     end
 
     should 'allow choose out of stock variants' do
@@ -76,9 +76,9 @@ class ProductTest < ActionDispatch::IntegrationTest
         assert color["class"].include?("selected")
       end
       # add to cart button is still disabled
-      assert_equal "true", find_button("Add To Cart")["disabled"]
+      assert find_button("Add To Cart", :disabled => true).disabled?
       # add to wishlist button is enabled
-      assert_equal "false", find_button("Add To Wishlist")["disabled"]
+      assert !find_button("Add To Wishlist").disabled?
     end
 
     should "choose in stock variant" do
@@ -92,9 +92,9 @@ class ProductTest < ActionDispatch::IntegrationTest
         assert color["class"].include?("selected")
       end
       # add to cart button is enabled
-      assert_equal "false", find_button("Add To Cart")["disabled"]
+      assert !find_button("Add To Cart").disabled?
       # add to wishlist button is enabled
-      assert_equal "false", find_button("Add To Wishlist")["disabled"]
+      assert !find_button("Add To Wishlist").disabled?
     end
 
     should "should select first instock variant when default_instock is true" do
@@ -110,7 +110,7 @@ class ProductTest < ActionDispatch::IntegrationTest
       end
 
       # add to cart button is enabled
-      assert_equal "false", find_button("Add To Cart")["disabled"]
+      assert !find_button("Add To Cart").disabled?
       within("span.price.selling") do
         assert page.has_content?("$35.99")
       end
@@ -153,9 +153,9 @@ class ProductTest < ActionDispatch::IntegrationTest
         assert color["class"].include?("selected")
       end
       # add to cart button is enabled
-      assert_equal "false", find_button("Add To Cart")["disabled"]
+      assert !find_button("Add To Cart").disabled?
       # add to wishlist button is enabled
-      assert_equal "false", find_button("Add To Wishlist")["disabled"]
+      assert !find_button("Add To Wishlist").disabled?
     end
   end
 end

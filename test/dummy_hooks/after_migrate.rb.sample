@@ -1,1 +1,1 @@
-rake "db:migrate db:test:prepare db:seed db:sample", :env => "development"
+rake "db:migrate db:test:prepare db:seed spree_sample:load", :env => "development"
