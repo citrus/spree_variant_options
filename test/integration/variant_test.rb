@@ -56,9 +56,9 @@ class ProductTest < ActionDispatch::IntegrationTest
       end
 
       # add to cart button is still disabled
-      assert_equal "true", find_button("Add To Cart")["disabled"]
+      assert_equal "true", find_button("Add To Cart", :disabled => true)["disabled"]
       # add to wishlist button is still disabled
-      assert_equal "true", find_button("Add To Wishlist")["disabled"]
+      assert_equal "true", find_button("Add To Wishlist", :disabled => true)["disabled"]
     end
 
     should 'allow choose out of stock variants' do
@@ -76,7 +76,7 @@ class ProductTest < ActionDispatch::IntegrationTest
         assert color["class"].include?("selected")
       end
       # add to cart button is still disabled
-      assert_equal "true", find_button("Add To Cart")["disabled"]
+      assert_equal "true", find_button("Add To Cart", :disabled => true)["disabled"]
       # add to wishlist button is enabled
       assert_equal "false", find_button("Add To Wishlist")["disabled"]
     end
@@ -94,7 +94,7 @@ class ProductTest < ActionDispatch::IntegrationTest
       # add to cart button is enabled
       assert_equal "false", find_button("Add To Cart")["disabled"]
       # add to wishlist button is enabled
-      assert_equal "false", find_button("Add To Wishlist")["disabled"]
+      assert_equal "false", find_button("Add To Wishlist", :disabled => true)["disabled"]
     end
 
     should "should select first instock variant when default_instock is true" do
