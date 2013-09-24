@@ -1,12 +1,21 @@
 FactoryGirl.define do
 
+  factory :shipping_category, :class => Spree::ShippingCategory do
+    name 'default shipping category'
+  end
+
   factory :product, :class => Spree::Product do
     name "Very Wearily Variantly"
     description "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla nonummy aliquet mi. Proin lacus. Ut placerat. Proin consequat, justo sit amet tempus consequat, elit est adipiscing odio, ut egestas pede eros in diam. Proin varius, lacus vitae suscipit varius, ipsum eros convallis nisi, sit amet sodales lectus pede non est. Duis augue. Suspendisse hendrerit pharetra metus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur nec pede. Quisque volutpat, neque ac porttitor sodales, sem lacus rutrum nulla, ullamcorper placerat ante tortor ac odio. Suspendisse vel libero. Nullam volutpat magna vel ligula. Suspendisse sit amet metus. Nunc quis massa. Nulla facilisi. In enim. In venenatis nisi id eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nunc sit amet felis sed lectus tincidunt egestas. Mauris nibh."
     available_on { Time.zone.now - 1.day }
     permalink "very-wearily-variantly"
     price 17.00
-    count_on_hand 10
+    # count_on_hand 10
+    after_create do |product|
+      product.master.stock_items.each do |stock_item|
+        Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
+      end
+    end
   end
   
   factory :product_with_variants, :parent => :product do
@@ -26,7 +35,12 @@ FactoryGirl.define do
     sequence(:sku) { |n| "ROR-#{1000 + n}" }
     sequence(:price) { |n| 19.99 + n }
     cost_price 17.00
-    count_on_hand 10
+    # count_on_hand 10
+    after_create do |variant|
+      variant.stock_items.each do |stock_item|
+        Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
+      end
+    end
   end
   
   factory :option_type, :class => Spree::OptionType do

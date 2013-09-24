@@ -9,7 +9,8 @@ class Spree::ProductTest < ActiveSupport::TestCase
   context "any product" do
 
     setup do
-      @product = Factory.create(:product)
+      shipping_category = Factory.create :shipping_category
+      @product = Factory.create(:product, :shipping_category => shipping_category)
     end
 
     should "have proper methods" do
@@ -24,7 +25,8 @@ class Spree::ProductTest < ActiveSupport::TestCase
   context "a product with variants" do
 
     setup do
-      @product = Factory.create(:product_with_variants)
+      shipping_category = Factory.create :shipping_category
+      @product = Factory.create(:product_with_variants, :shipping_category => shipping_category)
     end
 
     should "have variants and option types and values" do

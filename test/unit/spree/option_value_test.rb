@@ -56,7 +56,8 @@ class Spree::OptionValueTest < ActiveSupport::TestCase
 
   context "#for_product" do
     setup do
-      @product = Factory.create(:product_with_variants)
+      shipping_category = Factory.create :shipping_category
+      @product = Factory.create(:product_with_variants, :shipping_category => shipping_category)
     end
 
     should "return uniq option_values" do
@@ -75,7 +76,8 @@ class Spree::OptionValueTest < ActiveSupport::TestCase
     end
 
     should "return empty array when no variants" do
-      product = Factory(:product)
+      shipping_category = Factory.create :shipping_category
+      product = Factory(:product, :shipping_category => shipping_category)
       assert_equal [], Spree::OptionValue.for_product(product)
     end
   end
