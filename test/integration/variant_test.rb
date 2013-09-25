@@ -19,7 +19,7 @@ class ProductTest < ActionDispatch::IntegrationTest
 
     setup do
       Spree::Config[:track_inventory_levels] = true
-      Spree::Config[:allow_backorders] = false
+      # Spree::Config[:allow_backorders] = false TODO
       @product = Factory(:product)
       @size = Factory(:option_type)
       @color = Factory(:option_type, :name => "Color")
@@ -27,10 +27,14 @@ class ProductTest < ActionDispatch::IntegrationTest
       @m = Factory(:option_value, :presentation => "M", :option_type => @size)
       @red = Factory(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
       @green = Factory(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
-      @variant1 = Factory(:variant, :product => @product, :option_values => [@s, @red], :on_hand => 0)
-      @variant2 = Factory(:variant, :product => @product, :option_values => [@s, @green], :on_hand => 0)
-      @variant3 = Factory(:variant, :product => @product, :option_values => [@m, @red], :on_hand => 0)
-      @variant4 = Factory(:variant, :product => @product, :option_values => [@m, @green], :on_hand => 1)
+      
+      @variant1 = Factory(:variant, :product => @product, :option_values => [@s, @red])
+      @variant2 = Factory(:variant, :product => @product, :option_values => [@s, @green])
+      @variant3 = Factory(:variant, :product => @product, :option_values => [@m, @red])
+      [@variant1, @variant2, @variant3].each {|variant| variant.stock_items.each { |stock_item| stock_item.update_attribute(count_on_hand = 0) } }
+
+      @variant4 = Factory(:variant, :product => @product, :option_values => [@m, @green])
+      @variant4.stock_items.each { |stock_item| stock_item.update_attribute(count_on_hand = 1) }
 
       Deface::Override.new( :virtual_path => "spree/products/show",
       :name => "add_other_form_to_spree_variant_options",
@@ -128,7 +132,7 @@ class ProductTest < ActionDispatch::IntegrationTest
     setup do
       reset_spree_preferences do |config|
         config.track_inventory_levels = false
-        config.allow_backorders = false
+        # config.allow_backorders = false TODO
       end
       @product = Factory(:product)
       @size = Factory(:option_type)

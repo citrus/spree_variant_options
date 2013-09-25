@@ -1,7 +1,21 @@
 FactoryGirl.define do
 
   factory :shipping_category, :class => Spree::ShippingCategory do
-    name 'default shipping category'
+    sequence(:name) { |n| "ShippingCategory ##{n}" }
+  end
+
+  factory :stock_location, :class => Spree::StockLocation do
+    sequence(:name) { |n| "StockLocation ##{n}" }
+    active true
+    country { Spree::Country.where(iso: 'US').first }
+  end
+
+  factory :stock_item, :class => Spree::StockItem do
+    backorderable true
+    stock_location
+    # variant
+    # count_on_hand 10
+    after_create { |object| object.adjust_count_on_hand(10) }
   end
 
   factory :product, :class => Spree::Product do
@@ -11,11 +25,12 @@ FactoryGirl.define do
     permalink "very-wearily-variantly"
     price 17.00
     # count_on_hand 10
-    after_create do |product|
-      product.master.stock_items.each do |stock_item|
-        Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
-      end
-    end
+    # after_create do |product|
+      # product.master.stock_items.each do |stock_item|
+        # Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
+      # end
+    # end
+    shipping_category
   end
   
   factory :product_with_variants, :parent => :product do
@@ -35,12 +50,14 @@ FactoryGirl.define do
     sequence(:sku) { |n| "ROR-#{1000 + n}" }
     sequence(:price) { |n| 19.99 + n }
     cost_price 17.00
+    # stock_items { FactoryGirl.create_list(:stock_item, 1) }
     # count_on_hand 10
-    after_create do |variant|
-      variant.stock_items.each do |stock_item|
-        Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
-      end
-    end
+    # after_create do |variant|
+      # 
+      # variant.stock_items.each do |stock_item|
+        # Spree::StockMovement.create(:quantity => 10, :stock_item => stock_item)
+      # end
+    # end
   end
   
   factory :option_type, :class => Spree::OptionType do

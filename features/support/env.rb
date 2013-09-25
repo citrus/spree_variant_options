@@ -20,5 +20,5 @@ World(HelperMethods)
 # ensures spree preferencs are reset before each test
 Before do
   Spree::Config.instance_variable_set("@configuration", nil)
-  Spree::Config.set(:allow_backorders => true)
+  # Spree::Config.set(:allow_backorders => true)
 end
