@@ -1,16 +1,8 @@
 # encoding: UTF-8
-require 'rubygems'
-begin
-  require 'bundler/setup'
-rescue LoadError
-  puts 'You must `gem install bundler` and `bundle install` to run rake tasks'
-end
-
-#require 'rake'
-require 'rake/testtask'
-
+require 'bundler'
 Bundler::GemHelper.install_tasks
 
+require 'rake/testtask'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
@@ -24,3 +16,11 @@ Cucumber::Rake::Task.new do |t|
 end
 
 task :default => [ :test, :cucumber ]
+
+require 'spree/testing_support/extension_rake'
+desc 'Generates a dummy app for testing'
+task :test_app do
+  ENV['LIB_NAME'] = 'spree_variant_options'
+  ENV['DUMMY_PATH'] = File.expand_path("../test/dummy", __FILE__)
+  Rake::Task['extension:test_app'].invoke
+end

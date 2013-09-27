@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-$:.push File.expand_path("../lib", __FILE__)
+# $:.push File.expand_path("../lib", __FILE__)
 require "spree_variant_options/version"
 
 Gem::Specification.new do |s|
@@ -12,19 +12,13 @@ Gem::Specification.new do |s|
   s.summary     = %q{Spree Variant Options is a simple spree extension that replaces the radio-button variant selection with groups of option types and values.}
   s.description = %q{Spree Variant Options is a simple spree extension that replaces the radio-button variant selection with groups of option types and values. Please see the documentation for more details.}
 
-  s.rubyforge_project = "spree_variant_options"
-
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
+  s.require_path = 'lib'
+  s.requirements << 'none'
 
   # Runtime
-  s.add_dependency('spree', '>= 2.0.3')
+  s.add_dependency('spree_core', '2.0.4')
 
   # Development
-  s.add_development_dependency('spree_sample',     '~> 2.0.4')
-  s.add_development_dependency('dummier',          '~> 0.3.2')
   s.add_development_dependency('shoulda',          '~> 3.0')
   s.add_development_dependency('factory_girl',     '~> 2.3')
   s.add_development_dependency('cucumber-rails',   '~> 1.2')
@@ -36,6 +30,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency('launchy')
   s.add_development_dependency('therubyracer')
   s.add_development_dependency('database_cleaner', '< 1.1.0')
-  # s.add_development_dependency('debugger')
 
 end
