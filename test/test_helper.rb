@@ -6,7 +6,6 @@ require "rails/test_help"
 require "shoulda"
 require "factory_girl"
 require "sqlite3"
-# require 'spree/testing_support/factories'
 
 begin; require "debugger"; rescue LoadError; end
 begin; require "turn"; rescue LoadError; end

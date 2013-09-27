@@ -10,7 +10,15 @@ Spree::Product.class_eval do
 
   def variants_for_option_value(value)
     @_variant_option_values ||= variants.includes(:option_values).all
-    @_variant_option_values.select { |i| i.option_value_ids.include?(value.id) }
+    @_variant_option_values.select { |i| i.option_value_ids.include?(value.id) } # TODO ugly?
+  end
+
+  def stock_items_for_option_value(value)
+    stock_items.includes(:variant => :option_values).where("spree_option_values.id = #{value.id}")
+  end
+
+  def option_value_backorderable?(value)
+    stock_items_for_option_value(value).where(:backorderable => true).any?
   end
 
   def variant_options_hash

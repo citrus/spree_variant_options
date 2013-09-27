@@ -19,7 +19,7 @@ class ProductTest < ActionDispatch::IntegrationTest
 
     setup do
       Spree::Config[:track_inventory_levels] = true
-      # Spree::Config[:allow_backorders] = false TODO
+
       @product = Factory(:product)
       @size = Factory(:option_type)
       @color = Factory(:option_type, :name => "Color")
@@ -31,16 +31,26 @@ class ProductTest < ActionDispatch::IntegrationTest
       @variant1 = Factory(:variant, :product => @product, :option_values => [@s, @red])
       @variant2 = Factory(:variant, :product => @product, :option_values => [@s, @green])
       @variant3 = Factory(:variant, :product => @product, :option_values => [@m, @red])
-      [@variant1, @variant2, @variant3].each {|variant| variant.stock_items.each { |stock_item| stock_item.update_attribute(count_on_hand = 0) } }
-
       @variant4 = Factory(:variant, :product => @product, :option_values => [@m, @green])
-      @variant4.stock_items.each { |stock_item| stock_item.update_attribute(count_on_hand = 1) }
+
+      # implicitly creates stock items for each variant
+      location = Spree::StockLocation.first_or_create! name: 'default'
+      location.active = true
+      location.country =  Spree::Country.where(iso: 'US').first
+      location.save!
+      # adjust stock items count on hand
+      [@variant1, @variant2, @variant3].each do |variant|
+        variant.stock_items.each { |stock_item| Spree::StockMovement.create(:quantity => 0, :stock_item => stock_item) }
+      end
+      @variant4.stock_items.each { |stock_item| Spree::StockMovement.create(:quantity => 1, :stock_item => stock_item) }
 
       Deface::Override.new( :virtual_path => "spree/products/show",
       :name => "add_other_form_to_spree_variant_options",
       :insert_after => "div#cart-form",
       :text => '<div id="wishlist-form"><%= form_for Spree::WishedProduct.new, :url => "foo", :html => {:"data-form-type" => "variant"} do |f| %><%= f.hidden_field :variant_id, :value => @product.master.id %><button type="submit"><%= t(:add_to_wishlist) %></button><% end %></div>')
+
       SpreeVariantOptions::VariantConfig.default_instock = false
+
     end
 
     should 'disallow choose out of stock variants' do
@@ -132,7 +142,6 @@ class ProductTest < ActionDispatch::IntegrationTest
     setup do
       reset_spree_preferences do |config|
         config.track_inventory_levels = false
-        # config.allow_backorders = false TODO
       end
       @product = Factory(:product)
       @size = Factory(:option_type)
@@ -145,10 +154,8 @@ class ProductTest < ActionDispatch::IntegrationTest
     end
 
     should "choose variant with track_inventory_levels to false" do
-
       visit spree.product_path(@product)
       within("#product-variants") do
-        # debugger
         size = find_link('S')
         size.click
         assert size["class"].include?("selected")
