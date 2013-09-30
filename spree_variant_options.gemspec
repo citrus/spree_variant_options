@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   # Runtime
-  s.add_dependency('spree_core', '2.0.4')
+  s.add_dependency('spree_core', '~> 2.0.4')
 
   # Development
   s.add_development_dependency('shoulda',          '~> 3.0')
