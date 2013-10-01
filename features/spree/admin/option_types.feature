@@ -7,6 +7,7 @@ Feature: Admin option type values
   
   Background:
     Given I have a product with variants
+    And I login as an admin
   
   Scenario: Index option values
     Given I'm on the edit admin option type page for option type "Size"

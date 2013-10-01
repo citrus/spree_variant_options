@@ -29,7 +29,7 @@ Given /^I( don't)? allow backorders$/ do |dont|
 end
 
 Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_images|
-  @product = Factory.create(has_variants ? :product_with_variants : :product)
+  @product = create(has_variants ? :product_with_variants : :product)
   unless has_images.nil?
     @product.images.create(:attachment => random_image, :alt => @product.name)
     unless has_variants.nil?
@@ -74,10 +74,10 @@ Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
     return @variant if @variant
     @product.option_type_ids.each_with_index do |otid, index|
       word = values[index]
-      val = Spree::OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase)
+      val = Spree::OptionValue.find_by_presentation(word) || create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase)
       values[index] = val
     end
-    @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
+    @variant = create(:variant, :product => @product, :option_values => values, :price => price)
   end
   @product.reload
 end

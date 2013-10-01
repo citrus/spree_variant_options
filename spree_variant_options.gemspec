@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   # Development
   s.add_development_dependency('shoulda',          '~> 3.0')
-  s.add_development_dependency('factory_girl',     '~> 2.3')
+  s.add_development_dependency('factory_girl',     '~> 4.2')
   s.add_development_dependency('cucumber-rails',   '~> 1.2')
   s.add_development_dependency('database_cleaner', '~> 0.6')
   s.add_development_dependency('sqlite3',          '~> 1.3')
