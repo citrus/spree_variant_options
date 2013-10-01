@@ -20,18 +20,18 @@ class ProductTest < ActionDispatch::IntegrationTest
     setup do
       Spree::Config[:track_inventory_levels] = true
 
-      @product = Factory(:product)
-      @size = Factory(:option_type)
-      @color = Factory(:option_type, :name => "Color")
-      @s = Factory(:option_value, :presentation => "S", :option_type => @size)
-      @m = Factory(:option_value, :presentation => "M", :option_type => @size)
-      @red = Factory(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
-      @green = Factory(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
+      @product = create(:product)
+      @size = create(:option_type)
+      @color = create(:option_type, :name => "Color")
+      @s = create(:option_value, :presentation => "S", :option_type => @size)
+      @m = create(:option_value, :presentation => "M", :option_type => @size)
+      @red = create(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
+      @green = create(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
       
-      @variant1 = Factory(:variant, :product => @product, :option_values => [@s, @red])
-      @variant2 = Factory(:variant, :product => @product, :option_values => [@s, @green])
-      @variant3 = Factory(:variant, :product => @product, :option_values => [@m, @red])
-      @variant4 = Factory(:variant, :product => @product, :option_values => [@m, @green])
+      @variant1 = create(:variant, :product => @product, :option_values => [@s, @red])
+      @variant2 = create(:variant, :product => @product, :option_values => [@s, @green])
+      @variant3 = create(:variant, :product => @product, :option_values => [@m, @red])
+      @variant4 = create(:variant, :product => @product, :option_values => [@m, @green])
 
       # implicitly creates stock items for each variant
       location = Spree::StockLocation.first_or_create! name: 'default'
@@ -143,12 +143,12 @@ class ProductTest < ActionDispatch::IntegrationTest
       reset_spree_preferences do |config|
         config.track_inventory_levels = false
       end
-      @product = Factory(:product)
-      @size = Factory(:option_type)
-      @color = Factory(:option_type, :name => "Color")
-      @s = Factory(:option_value, :presentation => "S", :option_type => @size)
-      @red = Factory(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
-      @green = Factory(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
+      @product = create(:product)
+      @size = create(:option_type)
+      @color = create(:option_type, :name => "Color")
+      @s = create(:option_value, :presentation => "S", :option_type => @size)
+      @red = create(:option_value, :name => "Color", :presentation => "Red", :option_type => @color)
+      @green = create(:option_value, :name => "Color", :presentation => "Green", :option_type => @color)
       @variant1 = @product.variants.create({:option_values => [@s, @red], :price => 10, :cost_price => 5}, :without_protection => true)
       @variant2 = @product.variants.create({:option_values => [@s, @green], :price => 10, :cost_price => 5}, :without_protection => true)
     end
