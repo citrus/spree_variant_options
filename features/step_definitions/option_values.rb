@@ -2,14 +2,14 @@ Then /^I should see option values for (.*)$/ do |value_string|
   values = value_string.gsub(" and ", ", ").split(", ")
   within "table.index.sortable" do
     values.each do |value|
-      assert has_xpath?("//input[@value='#{value}']")
-    end    
-  end  
+       assert page.has_selector? "input[value='#{value}']"
+    end
+  end
 end
 
 Then /^I fill in the option value fields for (.*)$/ do |parent|
   if parent == 'the new option value'
-    parent = "tr#spree_option_value"
+    parent = "tbody#option_values tr:first-child"
   else
     matches = parent.match(/([^"]*)"$/)
     ov = Spree::OptionValue.find_by_presentation(matches[matches.length - 1])
@@ -17,9 +17,9 @@ Then /^I fill in the option value fields for (.*)$/ do |parent|
   end
   within parent do
     %w(name presentation).each do |name|
-      find(:xpath, ".//input[contains(@name, '[#{name}]')]").set('xxx-large')
+      find("td.#{name} input").set('XXX-Large')
     end
-    find(:xpath, ".//input[contains(@name, '[image]')]").set(File.expand_path("../../../test/support/images/1.jpg", __FILE__))
+    find("input[type='file']").set(File.expand_path("../../../test/support/images/1.jpg", __FILE__))
   end
 end
 
@@ -30,10 +30,10 @@ Then /^I should see image "([^"]*)"$/ do |source|
   end
 end
 
-When /^I follow "([^"]*)" for option type "([^"]*)"$/ do |link_text, value_string|
+When /^I remove option type "([^"]*)"$/ do |value_string|
   ov = Spree::OptionValue.find_by_presentation(value_string)
   within "tr#spree_option_value_#{ov.id}" do
-    click_link link_text
+     find(".spree_remove_fields").click
   end
 end
 
