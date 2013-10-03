@@ -17,8 +17,8 @@ var show_variant_images = function(variant_id) {
     $("#main-image").data('selectedThumb', newImg);
     $("#main-image").data('selectedThumbId', thumb.attr('id'));
   }
-}
+};
 
 var show_all_variant_images = function() {
   $('li.vtmb').show();
-}
+};

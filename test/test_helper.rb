@@ -31,3 +31,11 @@ class ActionDispatch::IntegrationTest
     Capybara.use_default_driver # Revert Capybara.current_driver to Capybara.default_driver
   end
 end
+
+class Test::Unit::TestCase
+  # make Factory Girl syntax available without FactoryGirl.
+  include FactoryGirl::Syntax::Methods
+  # make spree factories available
+  require 'ffaker'
+  require 'spree/testing_support/factories'
+end

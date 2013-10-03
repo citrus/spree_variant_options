@@ -22,6 +22,7 @@ Feature: Products should have variant options
 
   Scenario: Interact with options for a product
     Given I have a product with variants
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
     Then I should see enabled links for the second option type
@@ -35,22 +36,23 @@ Feature: Products should have variant options
       And the add to cart button should be enabled
 
   Scenario: Should show out of stock for appropriate variants
-    Given I don't allow backorders
-      And I have a product with variants
+    Given I have a product with variants
+      And the product isnt backorderable
+      And the variants have stock
       And the "Small Green" variant is out of stock
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
     Then I should see an out-of-stock link for "Green"
       And I should see an in-stock link for "Red, Blue, Black, White, Gray"
 
-  Scenario: Should allow backorders of in stock variants
-    Given I allow backorders
-      And I have a product with variants
-      And the "Small Green" variant is out of stock
+  Scenario: Should allow backorders of out of stock variants
+    Given I have a product with variants
+      And the product isnt backorderable
+      And the "Small Green" variant is backorderable
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
     Then I should see an in-stock link for "Green"
-      And I should see an in-stock link for "Red, Blue, Black, White, Gray"
+      And I should see an out-of-stock link for "Red, Blue, Black, White, Gray"
 
   Scenario: Should clear current selection
     Given I have a product with variants
@@ -62,6 +64,7 @@ Feature: Products should have variant options
 
   Scenario: Should clear current selection and maintain parent selection
     Given I have a product with variants
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
       And I follow "Green" within the second set of options
@@ -73,6 +76,7 @@ Feature: Products should have variant options
 
   Scenario: Should clear current selection and parent selection
     Given I have a product with variants
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
       And I follow "Green" within the second set of options
@@ -85,6 +89,7 @@ Feature: Products should have variant options
 
   Scenario: Should add proper variant to cart
     Given I have a product with variants
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
       And I follow "Green" within the second set of options
@@ -96,6 +101,7 @@ Feature: Products should have variant options
   Scenario: Should auto-select variant if its the only option
     Given I have a product with variants
       And I have an "XXL Turquoise" variant
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "XXL" within the first set of options
     Then I should see "Turquoise" selected within the second set of options
@@ -107,6 +113,7 @@ Feature: Products should have variant options
     Given I have a product with variants
       And I have an "XXS Turquoise" variant for $29.99
       And I have an "XXS Pink" variant for $24.99
+      And the variants have stock
       And I'm on the product page for the first product
     When I follow "XXS" within the first set of options
     Then I should see "$24.99 - $29.99" in the price
@@ -118,8 +125,8 @@ Feature: Products should have variant options
       And the add to cart button should be enabled
 
   Scenario: Should show the master price when all variants are out of stock
-    Given I don't allow backorders
-      And I have a product with variants
+    Given I have a product with variants
+      And the product isnt backorderable
       And all the variants are out of stock
       And I have a "master" variant for $20.99
     When I'm on the product page for the first product

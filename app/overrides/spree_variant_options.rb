@@ -24,3 +24,11 @@ Deface::Override.new(:virtual_path   => "spree/admin/option_types/edit",
                        "data-sortable-link" => "/admin/option_values/update_positions"
                      },
                      :disabled       => false)
+
+Deface::Override.new(:virtual_path   => "spree/admin/option_types/_option_value_fields",
+                     :name           => "admin_option_value_fields",
+                     :disabled       => false,
+                     :insert_after   => "td.presentation") do
+                     "<td><%= image_tag f.object.image.url(:small) if f.object.has_image? %></td>
+                      <td><%= f.file_field :image %></td>"
+end

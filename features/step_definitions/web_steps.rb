@@ -1,19 +1,27 @@
 require 'uri'
 require 'cgi'
 
+# TODO include Spree::AuthenticationHelpers in /spree_auth_devise/spec/support/authentication_helpers.rb
+def sign_in_as!(user)
+  visit '/login'
+  fill_in 'Email', :with => user.email
+  fill_in 'Password', :with => 'secret'
+  click_button 'Login'
+end
+
 def get_parent(parent)
   case parent.sub(/^the\s/, '')
     when "flash notice";  ".flash"
     when "first set of options";  "#option_type_#{@product.option_types.first.id}"
     when "second set of options"; "#option_type_#{@product.option_types[1].id}"
     when "variant images label";  "#product-thumbnails"
-    when "price"; "#product-price .price"   
+    when "price"; "#product-price"
     else "[set-your-parent] #{parent}"
   end
 end
 
 
-# WTF OMG HAX! 
+# TODO WTF OMG HAX! 
 # Why aren't these url helpers present from the spree core?
 # I've tried to include them in the env like so:
 #
@@ -46,6 +54,11 @@ end
 
 #========================================================================
 # Givens
+
+Given /^I login as an admin$/ do
+  admin = create :admin_user
+  sign_in_as! admin
+end
 
 Given /^I'm on the ((?!page).*) page$/ do |path|
   path = "#{path.downcase.gsub(/\s/, '_')}_path".to_sym

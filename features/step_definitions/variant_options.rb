@@ -1,6 +1,7 @@
 #===============================
 # Helpers
 
+# TODO strange behaviour: sometimes returns nil
 def variant_by_descriptor(descriptor)
   values = descriptor.split(" ")
   values.map! { |word| Spree::OptionValue.find_by_presentation(word) rescue nil }.compact!
@@ -20,21 +21,29 @@ end
 #===============================
 # Givens
 
-Given /^I( don't)? allow backorders$/ do |dont|
-  Spree::Config.instance_variable_set("@configuration", nil)
-  Spree::Config.set(:track_inventory_levels => true)
-  Spree::Config.set(:allow_backorders => dont.nil?)
-  assert_equal dont.nil?, !!Spree::Config[:allow_backorders]
-end
-
 Given /^I have a product( with variants)?( and images)?$/ do |has_variants, has_images|
-  @product = Factory.create(has_variants ? :product_with_variants : :product)
+  @product = create(has_variants ? :product_with_variants : :product)
   unless has_images.nil?
     @product.images.create(:attachment => random_image, :alt => @product.name)
     unless has_variants.nil?
       @product.variants.each do |v|
         v.images.create(:attachment => random_image, :alt => v.sku)
       end
+    end
+  end
+end
+
+Given /^the variants have stock$/ do
+  flunk unless @product
+  # implicitly creates stock items for each variant
+  location = Spree::StockLocation.first_or_create! name: 'default'
+  location.active = true
+  location.country =  Spree::Country.where(iso: 'US').first
+  location.save!
+  # adjust stock items count on hand
+  @product.variants.each do |variant|
+    variant.stock_items.each do |stock_item|
+      stock_item.update_attribute :count_on_hand, 1
     end
   end
 end
@@ -55,11 +64,24 @@ end
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
   @variant = variant_by_descriptor(descriptor)
-  @variant.update_attribute(:count_on_hand, 0)
+  @variant.stock_items.each do |stock_item|
+    stock_item.update_attribute :count_on_hand, 0
+  end
+end
+
+Given /^the "([^"]*)" variant is backorderable$/ do |descriptor|
+  flunk unless @product
+  @variant = variant_by_descriptor(descriptor)
+  @variant.stock_items.first.update_attribute :backorderable, true
 end
 
 Given /^all the variants are out of stock$/ do
-  @product.variants.update_all(:count_on_hand => 0)
+  flunk unless @product
+  @product.variants.each do |variant|
+    variant.stock_items.each do |stock_item|
+      Spree::StockMovement.create(:quantity => -stock_item.count_on_hand, :stock_item => stock_item)
+    end
+  end
 end
 
 Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
@@ -73,14 +95,18 @@ Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|
     return @variant if @variant
     @product.option_type_ids.each_with_index do |otid, index|
       word = values[index]
-      val = Spree::OptionValue.find_by_presentation(word) || Factory.create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase)
+      val = Spree::OptionValue.find_by_presentation(word) || create(:option_value, :option_type_id => otid, :presentation => word, :name => word.downcase)
       values[index] = val
     end
-    @variant = Factory.create(:variant, :product => @product, :option_values => values, :price => price)
+    @variant = create(:variant, :product => @product, :option_values => values, :price => price)
   end
   @product.reload
 end
 
+Given /^the product isnt backorderable$/ do
+  flunk unless @product
+  @product.stock_items.update_all :backorderable => false
+end
 
 #===============================
 # Whens
@@ -89,7 +115,7 @@ When /^I click the (current|first|last) clear button$/ do |parent|
   link = case parent
     when 'first'; find(".clear-index-0")
     when 'last'; find(".clear-index-#{@product.option_types.length - 1}")
-    else find(".clear-button:last")
+    else find(".clear-button")
   end
   assert_not_nil link
   link.click
@@ -105,7 +131,6 @@ end
 Then /^the source should contain the options hash$/ do
   assert source.include?("options: #{@product.variant_options_hash.to_json}")
   assert source.include?("track_inventory_levels: #{!!Spree::Config[:track_inventory_levels]}")
-  assert source.include?("allow_backorders: #{!!Spree::Config[:allow_backorders]}")
   assert source.include?("allow_select_outofstock: #{!!SpreeVariantOptions::VariantConfig[:allow_select_outofstock]}")
 end
 
@@ -130,7 +155,7 @@ end
 
 Then /^I should have a hidden input for the selected variant$/ do
   flunk unless @product
-  field = find("input[type=hidden]#variant_id")
+  field = find("input[type=hidden]#variant_id", :visible => false)
   assert_not_nil field
   assert_equal "products[#{@product.id}]", field.native.attribute("name")
   assert_equal "", field.native.attribute("value")
