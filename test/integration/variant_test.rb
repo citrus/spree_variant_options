@@ -38,6 +38,8 @@ class ProductTest < ActionDispatch::IntegrationTest
       location.active = true
       location.country =  Spree::Country.where(iso: 'US').first
       location.save!
+      # default is true, rather than overriding factory
+      Spree::StockItem.update_all :backorderable => false
       # adjust stock items count on hand
       [@variant1, @variant2, @variant3].each do |variant|
         variant.stock_items.each { |stock_item| Spree::StockMovement.create(:quantity => 0, :stock_item => stock_item) }
@@ -126,7 +128,7 @@ class ProductTest < ActionDispatch::IntegrationTest
       # add to cart button is enabled
       assert !find_button("Add To Cart").disabled?
       within("span.price.selling") do
-        assert page.has_content?("$35.99")
+        assert page.has_content?("$#{@variant4.price}")
       end
     end
 
