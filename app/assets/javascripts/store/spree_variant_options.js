@@ -43,7 +43,6 @@ function VariantOptions(params) {
   var selection = [];
   var buttons;
 
-
   function init() {
     divs = $('#product-variants .variant-options');
     disable(divs.find('a.option-value').addClass('locked'));
@@ -109,7 +108,7 @@ function VariantOptions(params) {
         disable($(element).addClass('unavailable locked').unbind('click'));
       } else if (keys.length == 1) {
         _var = variants[keys[0]];
-        $(element).addClass((allow_backorders || _var.count) ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');
+        $(element).addClass((allow_backorders || _var.count || _var.backorderable) ? selection.length == 1 ? 'in-stock auto-click' : 'in-stock' : 'out-of-stock');
       } else if (allow_backorders) {
         $(element).addClass('in-stock');
       } else {

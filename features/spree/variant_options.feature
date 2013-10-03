@@ -47,12 +47,12 @@ Feature: Products should have variant options
 
   Scenario: Should allow backorders of out of stock variants
     Given I have a product with variants
-      And the variants have stock
-      And the "Small Green" variant is out of stock
+      And the product isnt backorderable
+      And the "Small Green" variant is backorderable
       And I'm on the product page for the first product
     When I follow "Small" within the first set of options
     Then I should see an in-stock link for "Green"
-      And I should see an in-stock link for "Red, Blue, Black, White, Gray"
+      And I should see an out-of-stock link for "Red, Blue, Black, White, Gray"
 
   Scenario: Should clear current selection
     Given I have a product with variants

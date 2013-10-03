@@ -10,7 +10,8 @@ Spree::Variant.class_eval do
     { 
       :id    => self.id,
       :count => self.stock_items.sum(&:count_on_hand),
-      :price => number_to_currency(actual_price)
+      :price => number_to_currency(actual_price),
+      :backorderable => self.stock_items.where(:backorderable => true).any?
     }
   end
     

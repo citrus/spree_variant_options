@@ -69,6 +69,12 @@ Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   end
 end
 
+Given /^the "([^"]*)" variant is backorderable$/ do |descriptor|
+  flunk unless @product
+  @variant = variant_by_descriptor(descriptor)
+  @variant.stock_items.first.update_attribute :backorderable, true
+end
+
 Given /^all the variants are out of stock$/ do
   flunk unless @product
   @product.variants.each do |variant|
