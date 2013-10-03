@@ -3,7 +3,6 @@ ENV["RAILS_ROOT"] = File.expand_path("../../../test/dummy", __FILE__)
 
 require "cucumber/rails"
 require "selenium/webdriver"
-require 'capybara/firebug'
 require "factory_girl"
 require "ffaker"
 
