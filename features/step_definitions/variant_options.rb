@@ -1,6 +1,7 @@
 #===============================
 # Helpers
 
+# TODO strange behaviour: sometimes returns nil
 def variant_by_descriptor(descriptor)
   values = descriptor.split(" ")
   values.map! { |word| Spree::OptionValue.find_by_presentation(word) rescue nil }.compact!
@@ -41,7 +42,9 @@ Given /^the variants have stock$/ do
   location.save!
   # adjust stock items count on hand
   @product.variants.each do |variant|
-    variant.stock_items.each { |stock_item| Spree::StockMovement.create(:quantity => 1, :stock_item => stock_item) }
+    variant.stock_items.each do |stock_item|
+      stock_item.update_attribute :count_on_hand, 1
+    end
   end
 end
 
@@ -62,7 +65,7 @@ Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
   @variant = variant_by_descriptor(descriptor)
   @variant.stock_items.each do |stock_item|
-    Spree::StockMovement.create(:quantity => -stock_item.count_on_hand, :stock_item => stock_item)
+    stock_item.update_attribute :count_on_hand, 0
   end
 end
 
