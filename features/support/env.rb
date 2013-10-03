@@ -3,6 +3,7 @@ ENV["RAILS_ROOT"] = File.expand_path("../../../test/dummy", __FILE__)
 
 require "cucumber/rails"
 require "selenium/webdriver"
+require 'capybara/firebug'
 require "factory_girl"
 require "ffaker"
 
@@ -22,4 +23,5 @@ World(FactoryGirl::Syntax::Methods)
 # ensures spree preferencs are reset before each test
 Before do
   Spree::Config.instance_variable_set("@configuration", nil)
+  Spree::Config[:track_inventory_levels] = true
 end
