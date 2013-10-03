@@ -26,7 +26,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 To install Spree Variant Options, just add the following to your Gemfile:
 
 ```ruby
-gem 'spree_variant_options', '0.5.0'
+gem 'spree_variant_options'
 ```
 
 If you're on an older version of Spree, please reference the [Versionfile](https://github.com/citrus/spree_variant_options/blob/master/Versionfile) for your Spree version.
@@ -90,20 +90,20 @@ end
 Versions
 ------------------------------------------------------------------------------
 
-Spree Variant Options is compatible with Spree 0.30.x through 1.1.x. Please reference `Versionfile` for more details.
+Spree Variant Options is compatible with Spree 0.30.x through 2.0.x. Please reference `Versionfile` for more details.
 
 
 ------------------------------------------------------------------------------
 Testing
 ------------------------------------------------------------------------------
 
-Clone this repo to where you develop, bundle up, then run `dummier' to get the show started:
+Clone this repo to where you develop, bundle up, then run `rake test_app' to get the show started:
 
 ```bash
 git clone git://github.com/citrus/spree_variant_options.git
 cd spree_variant_options
 bundle install
-bundle exec dummier
+bundle exec rake test_app
 
 # cucumber/capybara
 bundle exec rake cucumber
@@ -127,9 +127,8 @@ You can easily use the test/dummy app as a demo of spree_variant_options. Just `
 ```bash
 git clone git://github.com/citrus/spree_variant_options.git
 cd spree_variant_options
-cp test/dummy_hooks/after_migrate.rb.sample test/dummy_hooks/after_migrate.rb
 bundle install
-bundle exec dummier
+bundle exec rake test_app
 cd test/dummy
 rails s
 ```
@@ -144,6 +143,7 @@ Contributors
 * Dan Morin ([@danmorin](https://github.com/danmorin))
 * Richard Brown ([@rbrown](https://github.com/rbrown))
 * [@baracek](https://github.com/baracek)
+* [@Numerico](https://github.com/Numerico)
 
 If you'd like to help out feel free to fork and send me pull requests!
 
