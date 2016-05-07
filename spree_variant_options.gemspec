@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Runtime
-  s.add_dependency('spree_core', '~> 1.2.0')
+  s.add_dependency('spree_core', '~> 3.1.0.rc2')
 
   # Development
   s.add_development_dependency('spree_sample',     '~> 1.2.0')
@@ -33,6 +33,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency('capybara')
   s.add_development_dependency('launchy')
   s.add_development_dependency('database_cleaner')
-  # s.add_development_dependency('debugger')
+  s.add_development_dependency('debugger')
 
 end

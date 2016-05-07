@@ -1,35 +1,35 @@
-<% if @product.has_variants? %>
-  <div id="product-variants">
-    <h2><%= t('variants') %></h2>
-    <% index = 0 %>
-    <% @product.grouped_option_values.each do |type, values| %>
+<div id="product-variants" class="col-md-6">
+  <h3 class="product-section-title"><%= Spree.t(:variants) %></h3>
+  <h6 id="variant-not-available" class="variant-not-available hidden">This variant is not available right now.</h6>
+  <ul class="list-group">
+    <% option_value_ids = @product.option_value_ids %>
+    <% grouped_option_values = @product.grouped_option_values %>
+
+    <% grouped_option_values.each_with_index do |type, index| %>
       <div id="<%= dom_id(type) %>" class="variant-options index-<%= index %>">
-        <h6 class="variant-option-type"><%= type.presentation %></h6>
+        <h6 class="variant-option-type"><strong><%= type.presentation %></strong></h6>
         <ul class="variant-option-values">
-        <% values.sort_by(&:position).each do |value| %>
-          <% classes = ["option-value"] %>
-          <% unless (variants = @product.variants_for_option_value(value)).empty? %>
-            <% classes << ( Spree::Config[:allow_backorders] || variants.sum(&:count_on_hand) > 0 ? "in-stock" : "out-of-stock" ) if index == 0 %>
-            <li><%= link_to value.has_image? ? image_tag(value.image.url, :alt => value.presentation) : content_tag(:span, value.presentation), "#", :title => value.presentation, :class => classes.join(" "), :rel => "#{type.id}-#{value.id}" %></li>
+          <% type.option_values.sort_by(&:position).each do |value| %>
+            <% if option_value_ids.include? value.id %>
+              <li><%= link_to value.has_image? ? image_tag(value.image.url, alt: value.presentation) : content_tag(:span, value.presentation), "#", title: value.presentation, class: "option-value", data: { type_id: type.id, value_id: value.id, level: (index + 1) } %></li>
+            <% end %>
           <% end %>
-        <% end %>
-          <li class="clear-option"><%= link_to "X", "#clear", :class => "clear-button clear-index-#{index}" %></li>
+          <li class="clear-option hidden">
+            <%= link_to "X", "#clear", class: "clear-button", data: { level: index } %>
+          </li>
           <li class="clear"></li>
         </ul>
       </div>
-      <% index += 1 %>
     <% end %>
-    <%= hidden_field_tag "products[#{@product.id}]", "", :id => "variant_id", :class => "hidden" %>
+    <%= hidden_field_tag "variant_id", "", id: "variant_id", class: "hidden" %>
     <script type="text/javascript">
     //<![CDATA[
-      var variant_options = new VariantOptions({
-        options: <%== @product.variant_options_hash.to_json -%>,
-        track_inventory_levels: <%==  !!Spree::Config[:track_inventory_levels] -%>,
-        allow_backorders: <%==  !!Spree::Config[:allow_backorders] -%>,
-        allow_select_outofstock: <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] -%>,
-        default_instock: <%== !!SpreeVariantOptions::VariantConfig[:default_instock] -%>
-      });
+      var variant_option_details = <%== @product.variants_option_value_details.to_json %>
+      var option_type_count = <%== grouped_option_values.length %>
     //]]>
     </script>
-  </div>
-<% end%>
+  </ul>
+</div>
+
+
+
