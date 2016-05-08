@@ -16,6 +16,9 @@ module SpreeVariantOptions
         inject_into_file "vendor/assets/stylesheets/spree/frontend/all.css", "*= require spree_variant_options\n", before: /\*\//, verbose: true
       end
 
+      def add_to_assest_precompile
+        append_file "config/initializers/assets.rb", "Rails.application.config.assets.precompile += %w( frontend/variant_options.js )\n"
+      end
     end
   end
 end

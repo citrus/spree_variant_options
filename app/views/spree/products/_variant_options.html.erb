@@ -25,11 +25,17 @@
     <script type="text/javascript">
     //<![CDATA[
       var variant_option_details = <%== @product.variants_option_value_details.to_json %>
-      var option_type_count = <%== grouped_option_values.length %>
+      var options = {
+        option_type_count: <%== grouped_option_values.length %>,
+        allow_select_outofstock: <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>,
+        default_instock: <%== !!SpreeVariantOptions::VariantConfig[:default_instock] %>
+      }
+
     //]]>
     </script>
   </ul>
 </div>
 
+<%= javascript_include_tag 'frontend/variant_options' %>
 
 

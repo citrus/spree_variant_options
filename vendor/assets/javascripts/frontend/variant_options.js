@@ -27,7 +27,7 @@ OptionValuesHandler.prototype.bindEvents = function() {
       _this.resetAllNextLevel($this);
       _this.unlockNextLevel($this);
 
-      if($this.data('level') == option_type_count) {
+      if($this.data('level') == options["option_type_count"]) {
         _this.setVariantWithSelecetedValues();
       }
     }
@@ -38,7 +38,6 @@ OptionValuesHandler.prototype.bindEvents = function() {
     $(this).closest('li').addClass('hidden');
     _this.updateSiblings($(this));
     _this.resetAllNextLevel($(this));
-    _this.disableCartInputFields(true);
   })
 };
 
@@ -59,14 +58,9 @@ OptionValuesHandler.prototype.resetAllNextLevel = function(optionValue) {
   var nextAllDivs = optionValue.closest('.variant-options').nextAll('.variant-options');
   nextAllDivs.find('.clear-option').addClass('hidden');
   nextAllDivs.find('.option-value').addClass('locked').removeClass('selected');
+  this.disableCartInputFields(true);
   this.setVariantId(false);
   this.thumbImages.show();
-};
-
-OptionValuesHandler.prototype.selectedOptionValues = function() {
-  return this.optionsButton.filter('.selected').map(function() {
-    return $(this).data('valueId');
-  });
 };
 
 OptionValuesHandler.prototype.setComparingConditions = function (conditions) {
@@ -78,21 +72,20 @@ OptionValuesHandler.prototype.setComparingConditions = function (conditions) {
 }
 
 OptionValuesHandler.prototype.anyVariantExists = function(conditions) {
-  var is_exist = false;
+  var variant = false;
   this.setComparingConditions(conditions);
 
   $.each(variant_option_details, function() {
     if(objectContains(this.option_types, conditions)) {
-      is_exist = true;
+      variant = { inStock: this.in_stock };
       return false
     }
   });
-  return is_exist;
+  return variant;
 };
 
 OptionValuesHandler.prototype.setVariantId = function(is_exist) {
   if(is_exist) {
-    console.log(this.variantId)
     this.variantField.val(this.variantId);
     this.priceHeading.html(this.variantPrice);
   } else {
@@ -105,17 +98,26 @@ OptionValuesHandler.prototype.unlockNextLevel = function(optionValue) {
   var allOptionValues = optionValue.closest('.variant-options').next().find('.option-value'),
       availableOptionValueCount = 0,
       availableOptionValue,
-      _this = this;
+      _this = this,
+      details;
 
   allOptionValues.each(function() {
     var $this = $(this),
         conditions = {};
-    conditions[$(this).data('typeId')] = $(this).data('valueId');
 
-    if(_this.anyVariantExists(conditions)) {
+    conditions[$(this).data('typeId')] = $(this).data('valueId');
+    details = _this.anyVariantExists(conditions)
+
+    if(details) {
       availableOptionValueCount += 1;
       availableOptionValue = $this
-      $this.removeClass('locked')
+      if(($this.data('level') == options["option_type_count"]) && !details["inStock"] && !options["allow_select_outofstock"]) {
+        $this.addClass('out-of-stock')
+      } else {
+        $this.removeClass('out-of-stock locked')
+      }
+    } else {
+      $this.removeClass('out-of-stock');
     }
   })
 
