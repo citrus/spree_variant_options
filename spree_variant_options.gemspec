@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Runtime
-  s.add_dependency('spree_core', '~> 3.1.0.beta')
+  s.add_dependency('spree_core', '~> 3.2.0.alpha')
 
   # Development
-  s.add_development_dependency 'spree_sample',     '~> 3.1.0.beta'
+  s.add_development_dependency 'spree_sample',     '~> 3.2.0.alpha'
   s.add_development_dependency 'shoulda-matchers', '~> 3.1.1'
   s.add_development_dependency 'factory_girl',     '~> 4.7.0'
   s.add_development_dependency 'cucumber-rails',   '~> 1.4.3'
