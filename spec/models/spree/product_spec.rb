@@ -9,15 +9,15 @@ describe Spree::Product do
 
   describe 'Instance Methods' do
 
-    describe '#grouped_option_values' do
+    describe '#ordered_option_types' do
       before { FactoryGirl.create_list(:product_option_type, 2, product: product) }
 
       it 'returns option_types' do
-        expect(product.grouped_option_values.collect(&:product_ids).flatten.uniq).to eq [product.id]
+        expect(product.ordered_option_types.collect(&:product_ids).flatten.uniq).to eq [product.id]
       end
 
       it 'returns option_types in assending order' do
-        expect(product.grouped_option_values).to eq product.option_types.order(:position)
+        expect(product.ordered_option_types).to eq product.option_types.order(:position)
       end
     end
 

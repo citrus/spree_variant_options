@@ -3,9 +3,9 @@
   <h6 id="variant-not-available" class="variant-not-available hidden">This variant is not available right now.</h6>
   <ul class="list-group">
     <% option_value_ids = @product.option_value_ids %>
-    <% grouped_option_values = @product.grouped_option_values %>
+    <% ordered_option_types = @product.ordered_option_types.includes(:option_values) %>
 
-    <% grouped_option_values.each_with_index do |type, index| %>
+    <% ordered_option_types.each_with_index do |type, index| %>
       <div id="<%= dom_id(type) %>" class="variant-options index-<%= index %>">
         <h6 class="variant-option-type"><strong><%= type.presentation %></strong></h6>
         <ul class="variant-option-values">
@@ -26,7 +26,7 @@
     //<![CDATA[
       var variant_option_details = <%== @product.variants_option_value_details.to_json %>
       var options = {
-        option_type_count: <%== grouped_option_values.length %>,
+        option_type_count: <%== ordered_option_types.length %>,
         allow_select_outofstock: <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>,
         default_instock: <%== !!SpreeVariantOptions::VariantConfig[:default_instock] %>
       }
