@@ -20,19 +20,17 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   # Runtime
-  s.add_dependency('spree_core', '~> 1.2.0')
+  s.add_dependency('spree_core', '~> 3.1.0.rc2')
 
   # Development
-  s.add_development_dependency('spree_sample',     '~> 1.2.0')
-  s.add_development_dependency('dummier',          '~> 0.3')
-  s.add_development_dependency('shoulda',          '~> 3.0')
-  s.add_development_dependency('factory_girl',     '~> 2.3')
-  s.add_development_dependency('cucumber-rails',   '~> 1.2')
-  s.add_development_dependency('database_cleaner', '~> 0.6')
-  s.add_development_dependency('sqlite3',          '~> 1.3')
-  s.add_development_dependency('capybara')
-  s.add_development_dependency('launchy')
-  s.add_development_dependency('database_cleaner')
-  # s.add_development_dependency('debugger')
-
+  s.add_development_dependency 'spree_sample',     '~> 3.1.0.rc2'
+  s.add_development_dependency 'shoulda-matchers', '~> 3.1.1'
+  s.add_development_dependency 'factory_girl',     '~> 4.7.0'
+  s.add_development_dependency 'cucumber-rails',   '~> 1.4.3'
+  s.add_development_dependency 'database_cleaner', '~> 1.5.3'
+  s.add_development_dependency 'sqlite3',          '~> 1.3.11'
+  s.add_development_dependency 'capybara',         '~> 2.7.1'
+  s.add_development_dependency 'launchy',          '~> 2.4.3'
+  s.add_development_dependency 'rspec-rails',      '~> 2.9'
+  s.add_development_dependency('byebug')
 end

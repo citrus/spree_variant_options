@@ -6,7 +6,7 @@ FactoryGirl.define do
     available_on { Time.zone.now - 1.day }
     permalink "very-wearily-variantly"
     price 17.00
-    count_on_hand 10
+    stock_items_count 10
   end
   
   factory :product_with_variants, :parent => :product do
@@ -26,7 +26,7 @@ FactoryGirl.define do
     sequence(:sku) { |n| "ROR-#{1000 + n}" }
     sequence(:price) { |n| 19.99 + n }
     cost_price 17.00
-    count_on_hand 10
+    stock_items_count 10
   end
   
   factory :option_type, :class => Spree::OptionType do

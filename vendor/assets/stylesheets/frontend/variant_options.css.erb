@@ -1,11 +1,16 @@
 #product-details .price.unselected {
-  color: #bbb;  
+  color: #bbb;
+}
+
+.variant-not-available{
+  color: red;
+  font-style: italic;
 }
 .variant-option-type {
-  margin-bottom: 0;
+  font-size: 15px;
 }
 #product-variants ul.variant-option-values {
-  list-style-type: none;  
+  list-style-type: none;
   margin-bottom: 1em;
 }
 .variant-option-values li {
@@ -16,7 +21,7 @@
 .variant-option-values li a {
   display: block;
   background-color: #f9f9f9;
-  border: 2px solid #eee;  
+  border: 2px solid #eee;
   padding: 2px 9px;
   margin: 3px 3px 0 0;
   text-decoration: none;
@@ -31,7 +36,6 @@
   clear: both;
 }
 li.clear-option a.clear-button {
-  display: none;
   font-weight: bold;
   background-color: #fff;
   border-color: #FDE2E2;
@@ -50,13 +54,13 @@ li.clear-option a.clear-button:hover {
 }
 .option-value.out-of-stock {
   display: block;
-  background: transparent url(<%= asset_path "store/out-of-stock.png" %>) 0 0 repeat;
+  background: transparent url(<%= asset_path "assets/frontend/out-of-stock.png" %>) 0 0 repeat;
   color: #aaa;
   cursor: default;
 }
 .option-value.locked,
 .option-value.locked:hover {
-  background-color: #fff;  
+  background-color: #fff;
   border-color: #f0f0f0;
   color: #ddd;
   cursor: default;
@@ -66,4 +70,8 @@ li.clear-option a.clear-button:hover {
   -moz-opacity:0.5;
   -khtml-opacity: 0.5;
   opacity: 0.5;
+}
+
+.hidden {
+  display: none;
 }
