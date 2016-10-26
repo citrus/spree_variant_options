@@ -1,3 +1,6 @@
+//= require spree/frontend
+//= require_tree ../../extentions
+
 var SpreeVariantOption = {}
 SpreeVariantOption.OptionValuesHandler = function(selectors) {
   this.optionsButton = selectors.optionsButton;
