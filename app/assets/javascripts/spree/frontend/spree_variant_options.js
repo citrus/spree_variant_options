@@ -1,5 +1,6 @@
 //= require spree/frontend
-//= require_tree ../../extentions
+//= require extentions/array
+//= require extentions/global_methods
 
 var SpreeVariantOption = {}
 SpreeVariantOption.OptionValuesHandler = function(selectors) {
