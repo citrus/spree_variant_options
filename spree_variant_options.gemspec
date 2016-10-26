@@ -24,13 +24,13 @@ Gem::Specification.new do |s|
 
   # Development
   s.add_development_dependency 'spree_sample',     '~> 3.2.0.alpha'
-  s.add_development_dependency 'shoulda-matchers', '~> 3.1.1'
-  s.add_development_dependency 'factory_girl',     '~> 4.7.0'
-  s.add_development_dependency 'cucumber-rails',   '~> 1.4.3'
-  s.add_development_dependency 'database_cleaner', '~> 1.5.3'
-  s.add_development_dependency 'sqlite3',          '~> 1.3.11'
-  s.add_development_dependency 'capybara',         '~> 2.7.1'
-  s.add_development_dependency 'launchy',          '~> 2.4.3'
-  s.add_development_dependency 'rspec-rails',      '~> 2.9'
-  s.add_development_dependency('byebug')
+  s.add_development_dependency 'shoulda-matchers',   '~> 3.1.1'
+  s.add_development_dependency 'factory_girl',       '~> 4.7.0'
+  s.add_development_dependency 'coffee-rails',       '~> 4.2.1'
+  s.add_development_dependency 'database_cleaner',   '~> 1.5.3'
+  s.add_development_dependency 'sqlite3',            '~> 1.3.11'
+  s.add_development_dependency 'capybara',           '~> 2.7.1'
+  s.add_development_dependency 'selenium-webdriver', '~> 2.53.0'
+  s.add_development_dependency 'launchy',            '~> 2.4.3'
+  s.add_development_dependency 'rspec-rails',        '~> 2.9'
 end

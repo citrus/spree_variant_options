@@ -1,3 +1,7 @@
+//= require spree/frontend
+//= require extentions/array
+//= require extentions/global_methods
+
 var SpreeVariantOption = {}
 SpreeVariantOption.OptionValuesHandler = function(selectors) {
   this.optionsButton = selectors.optionsButton;

@@ -4,7 +4,10 @@ ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 
 require 'rspec/rails'
+require 'capybara/rspec'
 require 'database_cleaner'
+require 'factory_girl'
+FactoryGirl.find_definitions
 require 'ffaker'
 require 'paperclip/matchers'
 require 'shoulda/matchers'
@@ -17,6 +20,7 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 require 'spree/testing_support/factories'
 require 'spree/testing_support/controller_requests'
 require 'spree/testing_support/authorization_helpers'
+require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/url_helpers'
 
 RSpec.configure do |config|
@@ -30,6 +34,8 @@ RSpec.configure do |config|
   # visit spree.admin_path
   # current_path.should eql(spree.products_path)
   config.include Spree::TestingSupport::UrlHelpers
+  config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :feature
+  config.include Spree::TestingSupport::ControllerRequests, type: :controller
 
   # == Mock Framework
   #
@@ -48,18 +54,18 @@ RSpec.configure do |config|
   # to cleanup after each test instead.  Without transactional fixtures set to false the records created
   # to setup a test will be unavailable to the browser, which runs under a seperate server instance.
   config.use_transactional_fixtures = false
-  config.include Spree::Core::Engine.routes.url_helpers
 
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+  config.before :each do |example|
+    if example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start
   end
 
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-      example.run
-    end
+  config.after :each do
+    DatabaseCleaner.clean
   end
 
   config.fail_fast = ENV['FAIL_FAST'] || false
@@ -81,10 +87,6 @@ Shoulda::Matchers.configure do |config|
     # Choose a test framework:
     with.test_framework :rspec
 
-    # Choose one or more libraries:
-    with.library :active_record
-    with.library :active_model
-    with.library :action_controller
     # Or, choose the following (which implies all of the above):
     with.library :rails
   end
