@@ -26,7 +26,7 @@ If you don't already have an existing Spree site, [click here](https://gist.gith
 To install Spree Variant Options, just add the following to your Gemfile:
 
 ```ruby
-gem 'spree_variant_options', github: 'vinsol-spree-contrib/spree_variant_options', branch: '3-1-stable'
+gem 'spree_variant_options', github: 'vinsol-spree-contrib/spree_variant_options', branch: 'x-x-stable'
 ```
 
 Now, bundle up with:
