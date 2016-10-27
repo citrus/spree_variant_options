@@ -92,14 +92,26 @@ feature "Products variant options", js: true do
         end
       end
 
+      scenario "expect not to have value for selected variant" do
+        within 'div#product-variants' do
+          expect(page.find('input#variant_id', visible: false).value).to be_blank
+        end
+      end
+
       context "when clicked on option value within second option type" do
         before do
           page.find('a.option-value[title="Red"]').click
         end
 
-        scenario "expect to have a enabled add to cart button" do
+        scenario "expect to have an enabled add to cart button" do
           within "div.add-to-cart" do
             expect(page.find('button#add-to-cart-button').disabled?).to be_falsey
+          end
+        end
+
+        scenario "expect to have value for selected variant" do
+          within 'div#product-variants' do
+            expect(page.find('input#variant_id', visible: false).value).to_not be_blank
           end
         end
       end
@@ -212,6 +224,111 @@ feature "Products variant options", js: true do
           within "div.variant-options.index-1" do
             expect(page).to have_css('a.option-value.locked')
           end
+        end
+      end
+
+      context "when clicked on option value within second option type" do
+        before do
+          page.find('a.option-value[title="Green"]').click
+        end
+
+        context "when clearing within second option type" do
+          before do
+            page.find('div.variant-options.index-1 a.clear-button').click
+          end
+
+          scenario "expect to see enabled links for the first option type" do
+            within "div.variant-options.index-0" do
+              expect(page).to_not have_css('a.option-value.locked')
+            end
+          end
+
+          scenario "expect to see enabled links for the second option type" do
+            within "div.variant-options.index-1" do
+              expect(page).to_not have_css('a.option-value.locked')
+            end
+          end
+
+          scenario "expect to have a disabled add to cart button" do
+            within "div.add-to-cart" do
+              expect(page.find('button#add-to-cart-button').disabled?).to be_truthy
+            end
+          end
+        end
+
+        context "when clearing within first option type" do
+          before do
+            page.find('div.variant-options.index-0 a.clear-button').click
+          end
+
+          scenario "expect to see enabled links for the first option type" do
+            within "div.variant-options.index-0" do
+              expect(page).to_not have_css('a.option-value.locked')
+            end
+          end
+
+          scenario "expect to see disabled links for the second option type" do
+            within "div.variant-options.index-1" do
+              expect(page).to have_css('a.option-value.locked')
+            end
+          end
+
+          scenario "expect to have a disabled add to cart button" do
+            within "div.add-to-cart" do
+              expect(page.find('button#add-to-cart-button').disabled?).to be_truthy
+            end
+          end
+        end
+      end
+    end
+  end
+
+  context "add proper variant to cart" do
+    before do
+      product.option_types = [option_type1, option_type2]
+      variant1
+      variant2
+      variant3
+      variant4
+      visit spree.product_path(product)
+    end
+
+    context "when add variant to cart" do
+      before do
+        page.find('a.option-value[title="Small"]').click
+        page.find('a.option-value[title="Green"]').click
+        page.find('button#add-to-cart-button').click
+      end
+
+      scenario "expect to see variant added to cart" do
+        within 'tbody#line_items .cart-item-description' do
+          expect(page).to have_content('Size: Small, Color: Green')
+        end
+      end
+    end
+  end
+
+  context "auto-select variant if its the only option" do
+    before do
+      product.option_types = [option_type1, option_type2]
+      variant2
+      visit spree.product_path(product)
+    end
+
+    context "when clicked on option value within first option type" do
+      before do
+        page.find('a.option-value[title="Small"]').click
+      end
+
+      scenario "expect to have an enabled add to cart button" do
+        within "div.add-to-cart" do
+          expect(page.find('button#add-to-cart-button').disabled?).to be_falsey
+        end
+      end
+
+      scenario "expect to have value for selected variant" do
+        within 'div#product-variants' do
+          expect(page.find('input#variant_id', visible: false).value).to_not be_blank
         end
       end
     end
