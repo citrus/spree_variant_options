@@ -1,6 +1,6 @@
 Spree::Product.class_eval do
 
-  has_many :option_values, -> { uniq }, through: :variants
+  has_many :option_values, through: :variants
 
   def ordered_option_types
     option_types.order(:position)

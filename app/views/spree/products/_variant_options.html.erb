@@ -2,7 +2,7 @@
   <h3 class="product-section-title"><%= Spree.t(:variants) %></h3>
   <h6 id="variant-not-available" class="variant-not-available hidden">This variant is not available right now.</h6>
   <ul class="list-group">
-    <% option_value_ids = @product.option_value_ids %>
+    <% option_value_ids = @product.option_value_ids.uniq %>
     <% ordered_option_types = @product.ordered_option_types.includes(:option_values) %>
 
     <% ordered_option_types.each_with_index do |type, index| %>
