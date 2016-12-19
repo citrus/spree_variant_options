@@ -18,7 +18,9 @@ SpreeVariantOption.OptionValuesHandler = function(selectors) {
 SpreeVariantOption.OptionValuesHandler.prototype.init = function() {
   this.bindEvents();
   this.optionsButton.filter('[data-level!=1]').addClass('locked').removeClass('selected');
-  this.disableCartInputFields(true);
+  if(this.optionsButton.length != 0) {
+    this.disableCartInputFields(true);
+  }
 };
 
 SpreeVariantOption.OptionValuesHandler.prototype.bindEvents = function() {
