@@ -23,7 +23,7 @@
     <script type="text/javascript">
     //<![CDATA[
       var variant_options = new VariantOptions({
-        options: <%== @product.variant_options_hash.to_json -%>,
+        options: <%== j @product.variant_options_hash.to_json -%>,
         track_inventory_levels: <%==  !!Spree::Config[:track_inventory_levels] -%>,
         allow_backorders: <%==  !!Spree::Config[:allow_backorders] -%>,
         allow_select_outofstock: <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] -%>,
