@@ -14,9 +14,6 @@
               <li><%= link_to value.has_image? ? image_tag(value.image.url, alt: value.presentation) : content_tag(:span, value.presentation), "#", title: value.presentation, class: "option-value", data: { type_id: type.id, value_id: value.id, level: (index + 1) } %></li>
             <% end %>
           <% end %>
-          <li class="clear-option hidden">
-            <%= link_to "X", "#clear", class: "clear-button", data: { level: index } %>
-          </li>
           <li class="clear"></li>
         </ul>
       </div>
