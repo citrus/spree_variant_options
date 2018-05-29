@@ -14,156 +14,106 @@ SpreeVariantOption.OptionValuesHandler = function(selectors) {
 };
 
 SpreeVariantOption.OptionValuesHandler.prototype.init = function() {
-  this.conditions = {};
-  this.bindEvents();
-  if (this.optionsButton.length != 0) {
-    this.disableCartInputFields(true);
-  }
+  this.disableCartInputFields(true);
+   this.originalCombination = this.getInitialCombination();
+   this.possibleCombinationsArray = $.extend(true, [], this.originalCombination);
+   this.onButtonClick();
 };
 
-SpreeVariantOption.OptionValuesHandler.prototype.bindEvents = function() {
-  this.optionsButtonClickHandler();
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.optionsButtonClickHandler = function() {
+SpreeVariantOption.OptionValuesHandler.prototype.onButtonClick = function() {
   var _this = this;
-
-  this.optionsButton.on('click', function(e) {
+  this.optionsButton.on("click", function() {
     var $this = $(this);
-    e.preventDefault();
-    $this.addClass('selected');
-    _this.updateSiblings($this);
-    _this.setConditions();
+    _this.possibleCombinationsArray = _this.findAndReduce(_this.possibleCombinationsArray, $this);
+    $this.addClass("selected");
     _this.disableCartInputFields(true);
-    _this.exactMatch = false;
 
-    if (!_this.variantExistsForThisCondition()) {
-      _this.resetAllLevel($this);
-      _this.conditions = {};
-      _this.setConditions();
-    }
-    if (_this.variantExistsForThisCondition()) {
-      if (_this.exactMatch) {
-        _this.unlockNextLevel($this, false);
-        _this.setVariantWithSelecetedValues();
-      } else {
-        _this.unlockNextLevel($this, true);
-      }
+    if(_this.possibleCombinationsArray.length == 0){
+      _this.resetAllOtherButtons($this);
+      _this.possibleCombinationsArray = $.extend(true, [], _this.originalCombination);
+      $this.trigger('click');
+    } else if(_this.containsEmptyHash()) {
+      _this.disableCartInputFields(false);
+      var variant = _this.findVariantForAllSelected();
+      _this.setVariantId(variant);
+      _this.showVariantImages(variant.variant_id);
+    } else if (_this.possibleCombinationsArray.length == 1) {
+      _this.findOptionButton(_this.possibleCombinationsArray[0]).trigger('click');
     }
   });
 };
 
-SpreeVariantOption.OptionValuesHandler.prototype.setConditions = function() {
-  var _this = this;
+SpreeVariantOption.OptionValuesHandler.prototype.resetAllOtherButtons = function(justClicked){
+  this.variantField.val('');
+  this.thumbImages.show();
+  this.optionsButton.filter('.selected').not(justClicked).removeClass('out-of-stock').removeClass('selected');
+};
+
+SpreeVariantOption.OptionValuesHandler.prototype.findVariantForAllSelected = function(){
+  conditions = {};
   this.optionsButton.filter('.selected').each(function() {
-    _this.conditions[$(this).data('typeId')] = $(this).data('valueId');
+    conditions[$(this).data('typeId')] = $(this).data('valueId');
   });
+  for (var i = variant_option_details.length - 1; i >= 0; i--) {
+    if (objectContains(variant_option_details[i].option_types, conditions)) {
+      variant = variant_option_details[i];
+      return variant;
+    }
+  }
 };
 
-SpreeVariantOption.OptionValuesHandler.prototype.variantExistsForThisCondition = function(conditions) {
-  if (!conditions) {
-    var conditions = this.conditions;
+SpreeVariantOption.OptionValuesHandler.prototype.findOptionButton = function(hash) {
+  var key = Object.keys(hash)[0];
+  var value = hash[key];
+  return this.optionsButton.filter('[data-type-id="' + key + '"][data-value-id="' + value + '"]');
+};
+
+SpreeVariantOption.OptionValuesHandler.prototype.setVariantId = function(variant) {
+  this.variantField.val(variant.variant_id);
+  this.priceHeading.html(variant.variant_price);
+  if (!variant.in_stock && !options["allow_select_outofstock"]) {
+    this.optionsButton.filter('.selected').each(function() {
+      $(this).addClass('out-of-stock');
+    })
   }
-  var variant = false;
-  var _this = this;
-  $.each(variant_option_details, function() {
-    if (objectContains(this.option_types, conditions)) {
-      variant = {
-        inStock: this.in_stock
-      };
-      if (objectContains(conditions, this.option_types)) {
-        _this.exactMatch = true;
-        return false;
-      }
+};
+
+SpreeVariantOption.OptionValuesHandler.prototype.containsEmptyHash = function(){
+  for (var i = this.possibleCombinationsArray.length - 1; i >= 0; i--) {
+    if(Object.keys(this.possibleCombinationsArray[i]).length == 0){
+      return true;
     }
-  });
-  return variant;
+  }
+};
+
+SpreeVariantOption.OptionValuesHandler.prototype.findAndReduce = function(availableOptions, justClickedButton) {
+  var key = justClickedButton.data("typeId")
+  var value = justClickedButton.data("valueId")
+  var reducedArray = [];
+  for (var i = availableOptions.length - 1; i >= 0; i--) {
+    if (availableOptions[i][key] == value) {
+      delete availableOptions[i][key];
+      reducedArray.push(availableOptions[i]);
+    }
+  }
+  return reducedArray;
+};
+
+SpreeVariantOption.OptionValuesHandler.prototype.getInitialCombination = function(){
+  var variantOptionTypes = [];
+  if (typeof variant_option_details != "undefined") {
+    $.each(variant_option_details, function() {
+      variantOptionTypes.push(this.option_types);
+    });
+  }
+  return variantOptionTypes;
 };
 
 SpreeVariantOption.OptionValuesHandler.prototype.disableCartInputFields = function(value) {
   this.addToCartButton.prop('disabled', value);
   this.quantityField.prop('disabled', value);
 
-  if (value) {
-    this.priceHeading.html('Select Variant');
-  }
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.updateSiblings = function(optionValue) {
-  var siblings = optionValue.closest('li').siblings();
-  siblings.find('a').removeClass('selected');
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.resetAllLevel = function(optionValue) {
-  var allDivs = optionValue.closest('.variant-options').siblings('.variant-options');
-  allDivs.find('.option-value').removeClass('selected');
-  this.disableCartInputFields(true);
-  this.setVariantId(false);
-  this.thumbImages.show();
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.setVariantId = function(is_exist) {
-  if (is_exist) {
-    this.variantField.val(this.variantId);
-    this.priceHeading.html(this.variantPrice);
-  } else {
-    this.variantField.val('');
-    this.priceHeading.html('Select Variant');
-  }
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.unlockNextLevel = function(optionValue, trigger) {
-  var divOption = optionValue.closest('.variant-options').siblings('.variant-options').first();
-  while (divOption.find('.selected').length > 0) {
-    divOption = divOption.next('.variant-options');
-  }
-
-  var allOptionValues = divOption.find('.option-value');
-  var availableOptionValueCount = 0,
-    availableOptionValue,
-    _this = this,
-    conditions = {},
-    details;
-
-  $.extend(conditions, this.conditions);
-  allOptionValues.each(function() {
-    var $this = $(this);
-
-    conditions[$(this).data('typeId')] = $(this).data('valueId');
-    details = _this.variantExistsForThisCondition(conditions);
-
-    if (details) {
-      availableOptionValueCount += 1;
-      availableOptionValue = $this;
-      if (!details["inStock"] && !options["allow_select_outofstock"]) {
-        $this.addClass('out-of-stock');
-      }
-    } else {
-      $this.removeClass('out-of-stock');
-    }
-  });
-  if (availableOptionValueCount == 1 && trigger) {
-    availableOptionValue.trigger('click');
-  }
-};
-
-SpreeVariantOption.OptionValuesHandler.prototype.setVariantWithSelecetedValues = function() {
-  var _this = this;
-  this.variantId = 0;
-  $.each(variant_option_details, function() {
-    if (objectContains(this.option_types, _this.conditions)) {
-      _this.variantId = this.variant_id;
-      _this.variantPrice = this.variant_price;
-    }
-  });
-
-  if (this.variantId) {
-    this.setVariantId(true);
-    this.showVariantImages(this.variantId);
-    this.disableCartInputFields(false);
-  } else {
-    this.disableCartInputFields(true);
-  }
+  if(value) { this.priceHeading.html('Select Variant'); }
 };
 
 SpreeVariantOption.OptionValuesHandler.prototype.showVariantImages = function(variantId) {
@@ -174,13 +124,13 @@ SpreeVariantOption.OptionValuesHandler.prototype.showVariantImages = function(va
   imagesToShow.first().trigger('mouseenter');
 };
 
-$(function() {
+$(function () {
   (new SpreeVariantOption.OptionValuesHandler({
     optionsButton: $('.option-value'),
     addToCartButton: $('#add-to-cart-button'),
     priceHeading: $('#product-price [itemprop=price]'),
     quantityField: $('#quantity'),
     variantField: $('#variant_id'),
-    thumbImages: $('li.vtmb')
+    thumbImages: $('li.vtmb'),
   })).init();
 });
