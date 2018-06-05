@@ -32,7 +32,7 @@ describe Spree::Product do
 
       it 'returns option_types' do
         expect(product.variants_option_value_details).to eq(
-          product.variants.collect do |variant|
+          product.variants.reload.collect do |variant|
             {
               in_stock: variant.can_supply?,
               variant_id: variant.id,
