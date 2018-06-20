@@ -3,6 +3,8 @@
 
 Spree Variant Options is a very simple spree extension that replaces the radio-button variant selection with groups of option types and values. To get a better idea let's let a few images do the explaining.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/jynti/spree_demo_app)
+
 
 #### When no selection has been made:
 ![Spree Variant Options - No selection](http://spree-docs.s3.amazonaws.com/spree_variant_options/v0.3.1/1.jpg)
