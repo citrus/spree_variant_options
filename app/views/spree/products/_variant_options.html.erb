@@ -11,7 +11,7 @@
         <ul class="variant-option-values">
           <% type.option_values.sort_by(&:position).each do |value| %>
             <% if option_value_ids.include? value.id %>
-              <li><%= link_to value.has_image? ? image_tag(value.image.url, alt: value.presentation) : content_tag(:span, value.presentation), "#", title: value.presentation, class: "option-value", data: { type_id: type.id, value_id: value.id, level: (index + 1) } %></li>
+              <li><%= link_to value.has_image? ? image_tag(value.image.url, alt: value.presentation) : content_tag(:span, value.presentation), "javascript:void(0)", title: value.presentation, class: "option-value", data: { hook: 'option-value', type_id: type.id, value_id: value.id, level: (index + 1) } %></li>
             <% end %>
           <% end %>
           <li class="clear"></li>
@@ -22,6 +22,9 @@
     <script type="text/javascript">
     //<![CDATA[
       var variant_option_details = <%== @product.variants_option_value_details.to_json %>
+      var original_combination = variant_option_details.map(function (item) {
+                              return item.option_types;
+                             });
       var options = {
         option_type_count: <%== ordered_option_types.length %>,
         allow_select_outofstock: <%== !!SpreeVariantOptions::VariantConfig[:allow_select_outofstock] %>,
