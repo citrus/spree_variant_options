@@ -114,7 +114,16 @@ SpreeVariantOption.OptionValuesHandler.prototype.disableCartInputFields = functi
 SpreeVariantOption.OptionValuesHandler.prototype.showVariantImages = function(variantId) {
   var imagesToShow = this.thumbImages.filter('li.tmb-' + variantId);
   this.thumbImages.hide();
-  imagesToShow.show().first().trigger('mouseenter');
+  if (imagesToShow.length === 0 ) {
+    allVariantImage = $('li.tmb-all')
+    if (allVariantImage.length === 0) {
+      $('li.noimage').first().trigger('mouseenter');
+    } else {
+      allVariantImage.first().trigger('mouseenter');
+    }
+  } else {
+    imagesToShow.show().first().trigger('mouseenter');
+  }
 };
 
 $(function() {

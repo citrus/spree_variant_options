@@ -1,3 +1,4 @@
 en:
   spree:
     already_created: Already created a variant with the same option values
+    products_associated: Cannot delete option type due to associated products.
