@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :product, :class => Spree::Product do
     name "Very Wearily Variantly"
@@ -8,18 +8,18 @@ FactoryGirl.define do
     price 17.00
     stock_items_count 10
   end
-  
+
   factory :product_with_variants, :parent => :product do
     after_create { |product|
       sizes = %w(Small Medium Large X-Large).map{|i| Factory.create(:option_value, :presentation => i) }
-      colors = %w(Red Green Blue Yellow Purple Gray Black White).map{|i| 
-        Factory.create(:option_value, :presentation => i, :option_type => Spree::OptionType.find_by_name("color") || Factory.create(:option_type, :presentation => "Color")) 
+      colors = %w(Red Green Blue Yellow Purple Gray Black White).map{|i|
+        Factory.create(:option_value, :presentation => i, :option_type => Spree::OptionType.find_by_name("color") || Factory.create(:option_type, :presentation => "Color"))
       }
       product.variants = sizes.map{|i| colors.map{|j| Factory.create(:variant, :product => product, :option_values => [i, j]) }}.flatten
       product.option_types = Spree::OptionType.where(:name => %w(size color))
     }
   end
-  
+
   factory :variant, :class => Spree::Variant do
     product { Spree::Product.last || Factory.create(:product) }
     option_values { [OptionValue.last || Factory.create(:option_value)] }
@@ -28,13 +28,13 @@ FactoryGirl.define do
     cost_price 17.00
     stock_items_count 10
   end
-  
+
   factory :option_type, :class => Spree::OptionType do
     presentation "Size"
     name { presentation.downcase }
     #sequence(:position) {|n| n }
   end
-  
+
   factory :option_value, :class => Spree::OptionValue do
     presentation "Large"
     name { presentation.downcase }

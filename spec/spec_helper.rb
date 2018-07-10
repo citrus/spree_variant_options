@@ -6,8 +6,8 @@ require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'database_cleaner'
-require 'factory_girl'
-FactoryGirl.find_definitions
+require 'factory_bot'
+FactoryBot.find_definitions
 require 'ffaker'
 require 'paperclip/matchers'
 require 'shoulda/matchers'
@@ -24,7 +24,7 @@ require 'spree/testing_support/capybara_ext'
 require 'spree/testing_support/url_helpers'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include Paperclip::Shoulda::Matchers
 
   # == URL Helpers

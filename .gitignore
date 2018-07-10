@@ -10,3 +10,4 @@ capybara-*.html
 .rvmrc
 spec/dummy
 .byebug_history
+gemfiles/*.gemfile.lock

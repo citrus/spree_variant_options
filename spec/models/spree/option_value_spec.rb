@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::OptionValue do
-  let(:option_value) { FactoryGirl.create(:option_value) }
+  let(:option_value) { FactoryBot.create(:option_value) }
 
   describe 'Associations' do
     it { should have_attached_file(:image) }
