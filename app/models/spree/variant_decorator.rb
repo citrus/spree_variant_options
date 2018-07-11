@@ -1,17 +1,9 @@
 Spree::Variant.class_eval do
-  
-  include ActionView::Helpers::NumberHelper
-  
-  attr_accessible :option_values
-  
-  def to_hash
-    actual_price  = self.price
-    #actual_price += Calculator::Vat.calculate_tax_on(self) if Spree::Config[:show_price_inc_vat]
-    { 
-      :id    => self.id, 
-      :count => self.count_on_hand, 
-      :price => number_to_currency(actual_price)
-    }
+  validate :uniqueness_of_option_values, unless: lambda {  option_values.empty? }
+
+  def uniqueness_of_option_values
+    if product.variants.where.not(id: self.id).includes(:option_values).map(&:option_value_ids).include? option_values.map(&:id)
+      errors.add(:base, Spree.t(:already_created))
+    end
   end
-    
 end

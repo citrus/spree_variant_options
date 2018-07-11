@@ -55,11 +55,11 @@ end
 Given /^the "([^"]*)" variant is out of stock$/ do |descriptor|
   flunk unless @product
   @variant = variant_by_descriptor(descriptor)
-  @variant.update_attribute(:count_on_hand, 0)
+  @variant.update_attribute(:stock_items_count, 0)
 end
 
 Given /^all the variants are out of stock$/ do
-  @product.variants.update_all(:count_on_hand => 0)
+  @product.variants.update_all(:stock_items_count => 0)
 end
 
 Given /^I have an? "([^"]*)" variant( for .*)?$/ do |descriptor, price|

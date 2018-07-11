@@ -1,5 +1,7 @@
 # encoding: UTF-8
+require 'bundler'
 require 'rubygems'
+require 'spree/testing_support/common_rake'
 begin
   require 'bundler/setup'
 rescue LoadError
@@ -18,9 +20,10 @@ Rake::TestTask.new(:test) do |t|
   t.verbose = false
 end
 
-require 'cucumber/rake/task'
-Cucumber::Rake::Task.new do |t|
-  t.cucumber_opts = %w{--format pretty}
+desc 'Generates a dummy app for testing'
+task :test_app do
+  ENV['LIB_NAME'] = 'spree_variant_options'
+  Rake::Task['common:test_app'].invoke
 end
 
-task :default => [ :test, :cucumber ]
+task :default => [ :test ]

@@ -1,3 +1,3 @@
 //= require jquery
 //= require jquery_ujs
-//= require store/spree_core
+//= require frontend/spree_core
